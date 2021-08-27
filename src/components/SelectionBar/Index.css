@@ -1,0 +1,51 @@
+:root {
+    --selection-clr-primary: rgb(247, 6, 38);
+}
+
+.selection {
+    width: 100%;
+    padding: 3rem;
+    position: relative;
+    background-color: var(--selection-clr-primary);
+}
+
+.slider-frame {
+    background-color: whitesmoke;
+    padding: 0.7rem 1rem;
+    display: inline-flex;
+    border: 1px solid grey;
+    border-radius: 1000rem;
+}
+
+.slider {
+    background: var(--selection-clr-primary);
+    -webkit-appearance: none;
+    border-radius: 1000rem;
+    height: 1rem;
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: whitesmoke;
+    border: 1px solid #222;
+    height: 1.4rem;
+    width: 1.4rem;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+    background: whitesmoke;
+    border: 1px solid #222;
+    height: 1.4rem;
+    width: 1.4rem;
+    border-radius: 50%;
+}
+
+.slider::-ms-thumb {
+    background: whitesmoke;
+    border: 1px solid #222;
+    height: 1.4rem;
+    width: 1.4rem;
+    border-radius: 50%;
+}
