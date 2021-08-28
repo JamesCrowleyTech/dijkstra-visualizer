@@ -1,3 +1,24 @@
-.grid {
+.section-grid {
     background: whitesmoke;
+    padding: 5rem;
+}
+
+.grid {
+    background: #ddd;
+    height: 100%;
+    display: grid;
+    padding: 3rem;
+}
+
+.grid-item {
+    display: inline-block;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 1000rem;
+    background-color: var(--clr-primary);
+    border: 3px solid black;
+    justify-self: start;
+    align-self: start;
+    /* position: absolute; */
+    transform: translate(-50%, -50%);
 }

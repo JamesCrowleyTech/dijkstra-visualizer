@@ -1,12 +1,12 @@
 :root {
-    --selection-clr-primary: rgb(247, 6, 38);
+    --clr-primary: rgb(247, 6, 38);
 }
 
 .selection {
     width: 100%;
     padding: 3rem;
     position: relative;
-    background-color: var(--selection-clr-primary);
+    background-color: var(--clr-primary);
 }
 
 .slider-frame {
@@ -18,7 +18,7 @@
 }
 
 .slider {
-    background: var(--selection-clr-primary);
+    background: var(--clr-primary);
     -webkit-appearance: none;
     border-radius: 1000rem;
     height: 1rem;
