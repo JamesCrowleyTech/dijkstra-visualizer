@@ -4,7 +4,7 @@ import "./Index.css";
 export default function SelectionBar() {
     return (
         <div className="selection">
-            <h1>Dijkstra Visualizer</h1>
+            <h1 className="selection-title">Dijkstra Visualizer</h1>
             <div className="slider-frame">
                 <input
                     type="range"

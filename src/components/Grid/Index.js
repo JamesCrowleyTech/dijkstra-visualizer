@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./Index.css";
+import { AppContext } from "../App/App.js";
 
 export default function Grid() {
+    const { state, dispatch } = useContext(AppContext);
+
     const numberOfRows = 10;
     const numberOfColumns = 16;
     const numberOfNodes = 20;
 
     const occupied = [];
-    for (let i = 0; i <= numberOfRows; i++) {
+    for (let i = 0; i < numberOfRows; i++) {
         const row = [];
-        for (let j = 0; j <= numberOfColumns; j++) {
+        for (let j = 0; j < numberOfColumns; j++) {
             row.push(false);
         }
         occupied.push(row);
@@ -20,26 +23,24 @@ export default function Grid() {
             <div
                 className="grid"
                 style={{
-                    gridTemplateColumns: `repeat(${numberOfColumns}, 1fr) 0px`,
-                    gridTemplateRows: `repeat(${numberOfRows}, 1fr) 0px`,
+                    gridTemplateColumns: `repeat(${numberOfColumns}, 1fr)`,
+                    gridTemplateRows: `repeat(${numberOfRows}, 1fr)`,
                 }}
             >
                 {Array.apply(null, Array(numberOfNodes)).map(function (_, i) {
                     let isPositionDetermined = false;
-                    let potentialRow = Math.floor(
-                        Math.random() * (numberOfRows + 1)
-                    );
+                    let potentialRow = Math.floor(Math.random() * numberOfRows);
                     let potentialColumn = Math.floor(
-                        Math.random() * (numberOfColumns + 1)
+                        Math.random() * numberOfColumns
                     );
 
                     while (!isPositionDetermined) {
                         if (occupied[potentialRow][potentialColumn]) {
                             potentialRow = Math.floor(
-                                Math.random() * (numberOfRows + 1)
+                                Math.random() * numberOfRows
                             );
                             potentialColumn = Math.floor(
-                                Math.random() * (numberOfColumns + 1)
+                                Math.random() * numberOfColumns
                             );
                         } else {
                             occupied[potentialRow][potentialColumn] = true;

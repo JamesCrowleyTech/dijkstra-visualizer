@@ -4,9 +4,14 @@
 
 .selection {
     width: 100%;
-    padding: 3rem;
+    padding: 3rem 2rem;
     position: relative;
     background-color: var(--clr-primary);
+    display: flex;
+}
+
+.selection-title {
+    color: white;
 }
 
 .slider-frame {

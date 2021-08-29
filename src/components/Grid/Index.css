@@ -17,8 +17,7 @@
     border-radius: 1000rem;
     background-color: var(--clr-primary);
     border: 3px solid black;
-    justify-self: start;
-    align-self: start;
+    justify-self: center;
+    align-self: center;
     /* position: absolute; */
-    transform: translate(-50%, -50%);
 }

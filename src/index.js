@@ -4,6 +4,11 @@ import "./index.css";
 import App from "./components/App/App.js";
 import reportWebVitals from "./reportWebVitals";
 
+// const max = 10000;
+// const min = 1;
+// const intervals = [1, 2, 5, 10, 100, 1000];
+// const sliderPoints = (max - min) / (sum(intervals) / intervals.length);
+
 ReactDOM.render(
     <React.StrictMode>
         <App />
