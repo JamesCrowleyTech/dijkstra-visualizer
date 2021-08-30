@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
-import { AppContext } from "../App/App";
+import React, { useState, useEffect } from "react";
 import "./Index.css";
-import { sum } from "lodash";
 
 export default function SelectionBar() {
-    const { state, dispatch } = useContext(AppContext);
+    const [speedSliderValue, setSpeedSliderValue] = useState(2);
 
     const speedSliderIntervals = [
         { 1: "10" },
@@ -16,6 +14,7 @@ export default function SelectionBar() {
     ];
 
     let speedSliderPoints = 0;
+    let speedSliderPosition = 1;
     const sliderValueToSpeed = [];
 
     speedSliderIntervals.forEach(function (pair, i) {
@@ -39,8 +38,23 @@ export default function SelectionBar() {
         }
     });
 
-    console.log(sliderValueToSpeed);
-    console.log(speedSliderPoints);
+    useEffect(() => {
+        const speedSlider = document.getElementById("speed_slider");
+        console.log(speedSlider);
+        const speedSliderListener = function () {
+            console.log(speedSliderValue);
+            setSpeedSliderValue(sliderValueToSpeed[this.value]);
+        };
+
+        speedSlider.addEventListener(
+            "input",
+            speedSliderListener.bind(speedSlider)
+        );
+
+        return function () {
+            speedSlider.removeEventListener("input", speedSliderListener);
+        };
+    }, [speedSliderValue]);
 
     return (
         <div className="selection">
@@ -54,6 +68,7 @@ export default function SelectionBar() {
                     max={sliderValueToSpeed.length}
                     className="slider"
                 ></input>
+                <h1>{sliderValueToSpeed[speedSliderPosition]}</h1>
             </div>
         </div>
     );
