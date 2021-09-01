@@ -13,14 +13,10 @@ const initialState = {
 const AppContext = React.createContext(initialState);
 
 function App() {
-    const [state, dispatch] = useReducer(reducer, initialState);
-
     return (
         <div className="app">
-            <AppContext.Provider value={{ state, dispatch }}>
-                <SelectionBar />
-                <Grid />
-            </AppContext.Provider>
+            <SelectionBar />
+            <Grid />
         </div>
     );
 }
