@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Index.css";
+import { AppContext } from "../App/App.js";
 
 export default function SelectionBar() {
-    const [speedSliderValue, setSpeedSliderValue] = useState(2);
-
+    const { state, dispatch } = useContext(AppContext);
     const speedSliderIntervals = [
         { 1: "10" },
         { 2: "50" },
@@ -40,10 +40,12 @@ export default function SelectionBar() {
 
     useEffect(() => {
         const speedSlider = document.getElementById("speed_slider");
-        console.log(speedSlider);
         const speedSliderListener = function () {
-            console.log(speedSliderValue);
-            setSpeedSliderValue(sliderValueToSpeed[this.value]);
+            console.log(state.speed);
+            dispatch({
+                type: "SET_SPEED",
+                payload: sliderValueToSpeed[this.value],
+            });
         };
 
         speedSlider.addEventListener(
@@ -54,7 +56,7 @@ export default function SelectionBar() {
         return function () {
             speedSlider.removeEventListener("input", speedSliderListener);
         };
-    }, [speedSliderValue]);
+    }, []);
 
     return (
         <div className="selection">
@@ -65,10 +67,10 @@ export default function SelectionBar() {
                     id="speed_slider"
                     name="speed_slider"
                     min={1}
-                    max={sliderValueToSpeed.length}
+                    max={sliderValueToSpeed.length - 1}
                     className="slider"
                 ></input>
-                <h1>{sliderValueToSpeed[speedSliderPosition]}</h1>
+                <h1>{state.speed}</h1>
             </div>
         </div>
     );

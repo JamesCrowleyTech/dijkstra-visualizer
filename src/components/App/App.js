@@ -5,18 +5,35 @@ import SelectionBar from "../SelectionBar/Index";
 import Grid from "../Grid/Index";
 import reducer from "../../reducer";
 
+const occupied = [];
+
 const initialState = {
-    speedSliderPosition: 0,
-    speedSliderValue: 0,
+    speed: 100,
+    numberOfRows: 10,
+    numberOfColumns: 16,
+    numberOfNodes: 20,
+    occupied: [],
 };
+
+for (let i = 0; i < initialState.numberOfRows; i++) {
+    const row = [];
+    for (let j = 0; j < initialState.numberOfColumns; j++) {
+        row.push(false);
+    }
+    initialState.occupied.push(row);
+}
 
 const AppContext = React.createContext(initialState);
 
 function App() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     return (
         <div className="app">
-            <SelectionBar />
-            <Grid />
+            <AppContext.Provider value={{ state, dispatch }}>
+                <SelectionBar />
+                <Grid />
+            </AppContext.Provider>
         </div>
     );
 }
