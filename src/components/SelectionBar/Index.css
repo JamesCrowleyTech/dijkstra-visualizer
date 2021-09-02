@@ -4,14 +4,33 @@
 
 .selection {
     width: 100%;
-    padding: 3rem 2rem;
+    padding: 1rem 2rem;
     position: relative;
     background-color: var(--clr-primary);
     display: flex;
+    align-items: center;
 }
 
 .selection-title {
     color: white;
+}
+
+.speed-container {
+    height: 100%;
+    background-color: whitesmoke;
+    padding: 1rem;
+    border-radius: 1000rem;
+    width: 27.6rem;
+    display: flex;
+    align-items: center;
+}
+
+.speed-title {
+    margin-right: 0.5rem;
+}
+
+.speed-display {
+    margin-left: auto;
 }
 
 .slider-frame {
