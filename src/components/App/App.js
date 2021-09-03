@@ -4,16 +4,25 @@ import "../SelectionBar/Index";
 import SelectionBar from "../SelectionBar/Index";
 import Grid from "../Grid/Index";
 import reducer from "../../reducer";
-
-const occupied = [];
+import { generateOccupiedMatrix, populateOccupiedMatrix } from "../../helpers";
 
 const initialState = {
     speed: 100,
     numberOfRows: 10,
     numberOfColumns: 16,
     numberOfNodes: 20,
-    occupied: [],
 };
+
+// prettier-ignore
+const initGrid = generateOccupiedMatrix(
+    initialState.numberOfRows,
+    initialState.numberOfColumns
+);
+initialState.occupied = populateOccupiedMatrix(
+    [...initGrid],
+    initialState.numberOfNodes
+);
+console.log(initialState.occupied);
 
 for (let i = 0; i < initialState.numberOfRows; i++) {
     const row = [];

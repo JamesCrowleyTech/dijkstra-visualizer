@@ -5,11 +5,9 @@ import { AppContext } from "../App/App.js";
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
 
-    console.log(state);
-
-    const numberOfRows = 10;
-    const numberOfColumns = 16;
-    const numberOfNodes = 20;
+    const numberOfRows = state.numberOfRows;
+    const numberOfColumns = state.numberOfColumns;
+    const numberOfNodes = state.numberOfNodes;
 
     const occupied = [];
     for (let i = 0; i < numberOfRows; i++) {
