@@ -4,7 +4,7 @@ import "../SelectionBar/Index";
 import SelectionBar from "../SelectionBar/Index";
 import Grid from "../Grid/Index";
 import reducer from "../../reducer";
-import { generateOccupiedMatrix, populateOccupiedMatrix } from "../../helpers";
+import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
@@ -13,24 +13,11 @@ const initialState = {
     numberOfNodes: 20,
 };
 
-// prettier-ignore
-const initGrid = generateOccupiedMatrix(
+initialState.occupied = generateGrid(
     initialState.numberOfRows,
-    initialState.numberOfColumns
-);
-initialState.occupied = populateOccupiedMatrix(
-    [...initGrid],
+    initialState.numberOfColumns,
     initialState.numberOfNodes
 );
-console.log(initialState.occupied);
-
-for (let i = 0; i < initialState.numberOfRows; i++) {
-    const row = [];
-    for (let j = 0; j < initialState.numberOfColumns; j++) {
-        row.push(false);
-    }
-    initialState.occupied.push(row);
-}
 
 const AppContext = React.createContext(initialState);
 

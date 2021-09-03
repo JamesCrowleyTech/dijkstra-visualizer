@@ -1,26 +1,18 @@
-export const generateOccupiedMatrix = function (height, width) {
-    const occupied = [];
+export const generateGrid = function (height, width, numberOfNodes) {
+    const matrix = [];
 
     for (let i = 0; i < height; i++) {
         const row = [];
         for (let j = 0; j < width; j++) {
             row.push(false);
         }
-        occupied.push(row);
+        matrix.push(row);
     }
-    return occupied;
-};
 
-export const populateOccupiedMatrix = function (matrix, count) {
-    if (!matrix) return;
+    if (height * width < numberOfNodes)
+        throw new Error("numberOfNodes overflowed grid dimensions");
 
-    const height = matrix.length;
-    const width = matrix[0].length;
-
-    if (height * width < count)
-        throw new Error("Count overflowed grid dimensions");
-
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < numberOfNodes; i++) {
         let isPositionDetermined = false;
         let potentialRow = Math.floor(Math.random() * height);
         let potentialColumn = Math.floor(Math.random() * width);
@@ -35,6 +27,5 @@ export const populateOccupiedMatrix = function (matrix, count) {
             }
         }
     }
-
     return matrix;
 };
