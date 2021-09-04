@@ -15,30 +15,35 @@
     color: white;
 }
 
-.speed-container {
+.slider-container {
     height: 100%;
     background-color: whitesmoke;
     padding: 1rem;
+    padding-right: 6.6rem;
     border-radius: 1000rem;
-    width: 27.6rem;
+    /* width: 27.6rem; */
+    position: relative;
     display: flex;
     align-items: center;
-}
-
-.speed-title {
-    margin-right: 0.5rem;
-}
-
-.speed-display {
-    margin-left: auto;
 }
 
 .slider-frame {
     background-color: whitesmoke;
     padding: 0.7rem 1rem;
+
     display: inline-flex;
     border: 1px solid grey;
     border-radius: 1000rem;
+}
+
+.slider-title {
+    margin-right: 0.5rem;
+}
+
+.slider-display {
+    position: absolute;
+    left: calc(100% - 3.3rem);
+    transform: translateX(-50%);
 }
 
 .slider {
