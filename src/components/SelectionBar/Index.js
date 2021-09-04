@@ -4,6 +4,8 @@ import { AppContext } from "../App/App.js";
 
 export default function SelectionBar() {
     const { state, dispatch } = useContext(AppContext);
+
+    console.log(state);
     const speedSliderIntervals = [
         { 1: "4" },
         { 2: "10" },
@@ -39,10 +41,8 @@ export default function SelectionBar() {
     });
 
     useEffect(() => {
-        console.log(speedSliderPoints);
         const speedSlider = document.getElementById("speed_slider");
         const speedSliderListener = function () {
-            console.log(state.speed);
             dispatch({
                 type: "SET_SPEED",
                 payload: sliderValueToSpeed[this.value],

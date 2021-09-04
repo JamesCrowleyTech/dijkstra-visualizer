@@ -7,7 +7,7 @@ import reducer from "../../reducer";
 import { generateGrid } from "../../helpers";
 
 const initialState = {
-    speed: 100,
+    speed: 10000,
     numberOfRows: 10,
     numberOfColumns: 16,
     numberOfNodes: 20,
