@@ -8,12 +8,12 @@ import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
-    numberOfRows: 10,
-    numberOfColumns: 16,
-    numberOfNodes: 20,
+    numberOfRows: 8,
+    numberOfColumns: 14,
+    numberOfNodes: 30,
 };
 
-initialState.occupied = generateGrid(
+initialState.gridMap = generateGrid(
     initialState.numberOfRows,
     initialState.numberOfColumns,
     initialState.numberOfNodes

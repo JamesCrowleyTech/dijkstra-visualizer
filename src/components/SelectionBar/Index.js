@@ -64,6 +64,7 @@ export default function SelectionBar() {
 
         const generateListener = function () {
             dispatch({ type: "NEW_GRID", payload: null });
+            // console.log(state.gridMap);
         };
 
         generateButton.addEventListener("click", generateListener);

@@ -6,7 +6,7 @@ export default function reducer(state, action) {
     if (action.type === "NEW_GRID") {
         return {
             ...state,
-            occupied: generateGrid(
+            gridMap: generateGrid(
                 state.numberOfRows,
                 state.numberOfColumns,
                 state.numberOfNodes

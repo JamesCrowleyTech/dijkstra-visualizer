@@ -5,15 +5,18 @@ import { AppContext } from "../App/App.js";
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
 
-    const { numberOfNodes, numberOfColumns, numberOfRows, occupied } = state;
+    const { numberOfNodes, numberOfColumns, numberOfRows, gridMap } = state;
+
+    console.log(state.gridMap);
 
     const occupiedIndices = [];
 
     for (let i = 0; i < numberOfRows; i++) {
         for (let j = 0; j < numberOfColumns; j++) {
-            if (occupied[i][j]) occupiedIndices.push([i, j]);
+            if (gridMap[i][j]) occupiedIndices.push([i, j]);
         }
     }
+    console.log(occupiedIndices);
 
     return (
         <div className="section-grid">
@@ -28,6 +31,7 @@ export default function Grid() {
                     return (
                         <div
                             className="grid-item"
+                            id={`grid-item--${i}`}
                             key={i}
                             style={{
                                 gridRow: `${y + 1} / ${y + 2}`,
