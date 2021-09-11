@@ -1,12 +1,13 @@
 :root {
     --clr-primary: rgb(247, 6, 38);
+    --clr-selection: rgb(10, 10, 30);
 }
 
 .selection {
     width: 100%;
     padding: 1rem 0rem;
     position: relative;
-    background-color: var(--clr-primary);
+    background-color: var(--clr-selection);
     display: flex;
     align-items: center;
 }

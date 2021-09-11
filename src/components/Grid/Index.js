@@ -7,16 +7,18 @@ export default function Grid() {
 
     const { numberOfNodes, numberOfColumns, numberOfRows, gridMap } = state;
 
-    console.log(state.gridMap);
+    // console.log(state.gridMap);
 
-    const occupiedIndices = [];
+    // const occupiedIndices = [];
 
-    for (let i = 0; i < numberOfRows; i++) {
-        for (let j = 0; j < numberOfColumns; j++) {
-            if (gridMap[i][j]) occupiedIndices.push([i, j]);
-        }
-    }
-    console.log(occupiedIndices);
+    // for (let i = 0; i < numberOfRows; i++) {
+    //     for (let j = 0; j < numberOfColumns; j++) {
+    //         if (gridMap[i][j]) occupiedIndices.push([i, j]);
+    //     }
+    // }
+    // console.log(occupiedIndices);
+
+    console.log(state);
 
     return (
         <div className="section-grid">
@@ -27,19 +29,33 @@ export default function Grid() {
                     gridTemplateRows: `repeat(${numberOfRows}, 1fr)`,
                 }}
             >
-                {occupiedIndices.map(function ([y, x], i) {
-                    return (
-                        <div
-                            className="grid-item"
-                            id={`grid-item--${i}`}
-                            key={i}
-                            style={{
-                                gridRow: `${y + 1} / ${y + 2}`,
-                                gridColumn: `${x + 1} / ${x + 2}`,
-                            }}
-                        ></div>
-                    );
-                })}
+                {state.gridMap
+                    .flat()
+                    .filter((_) => _)
+                    .map(function (node) {
+                        return (
+                            <div
+                                className="grid-item"
+                                id={`grid-item--${node.gridId}`}
+                                key={node.gridId}
+                                style={{
+                                    gridRow: `${node.row + 1} / ${
+                                        node.row + 2
+                                    }`,
+                                    gridColumn: `${node.column + 1} / ${
+                                        node.column + 2
+                                    }`,
+                                    backgroundColor: [
+                                        node.source
+                                            ? "yellow"
+                                            : node.destination
+                                            ? "blue"
+                                            : "",
+                                    ],
+                                }}
+                            ></div>
+                        );
+                    })}
             </div>
         </div>
     );

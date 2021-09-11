@@ -1,4 +1,6 @@
-const generateEmptyMatrix = function (height, width) {
+import Denque from "denque";
+
+const generateEmptyMatrix = function (height, width = height) {
     const matrix = [];
     for (let i = 0; i < height; i++) {
         const row = [];
@@ -12,32 +14,75 @@ const generateEmptyMatrix = function (height, width) {
 
 const getUnvisitedNeighbours = function (matrix, visited, i, j) {
     const unvisitedNeighbours = [];
-    if (i > 0 && !visited[i - 1][j]) unvisitedNeighbours.push([i - 1, j]);
-    if (i < matrix.length - 1 && !visited[i + 1][j])
+    if (i > 0 && !visited.has([i - 1, j])) unvisitedNeighbours.push([i - 1, j]);
+    if (i < matrix.length - 1 && !visited.has([i + 1, j]))
         unvisitedNeighbours.push([i + 1, j]);
-    if (j > 0 && !visited[i][j - 1]) unvisitedNeighbours.push([i, j - 1]);
-    if (j < matrix[0].length - 1 && !visited[i][j + 1])
+    if (j > 0 && !visited.has([i, j - 1])) unvisitedNeighbours.push([i, j - 1]);
+    if (j < matrix[0].length - 1 && !visited.has([i, j + 1]))
         unvisitedNeighbours.push([i, j + 1]);
     return unvisitedNeighbours;
 };
 
-const generateEdges = function (matrix, i, j) {
-    const visited = generateEmptyMatrix(matrix.length, matrix[0].length);
-    let required = 10;
-    const potentialNodes = [];
-    const queue = [[i, j]];
-    while (required) {
-        const [i, j] = queue.shift();
-        if (visited[i][j]) continue;
-        visited[i][j] = true;
-        if (matrix[i][j]) {
-            potentialNodes.push([i, j]);
-            required -= 1;
+const generateEdges = function (matrix) {
+    const nodesVisited = new Set();
+
+    const occupied = matrix.flat().filter((_) => _);
+
+    occupied.forEach((node) => (nodesVisited[node.gridId] = false));
+
+    console.log(nodesVisited);
+
+    const source = occupied.filter((n) => n.source);
+
+    const adjacencyMatrix = generateEmptyMatrix(occupied.length);
+
+    for (let current = 0; current < occupied.length - 1; current++) {
+        const node = occupied[current];
+        nodesVisited.add(`${node.row}/${node.column}`);
+
+        const visited = new Set();
+
+        const queue = new Denque();
+        queue.push([node.row, node.column]);
+
+        let edge = null;
+
+        while (queue) {
+            console.log(queue);
+            const [i, j] = queue.shift();
+            visited.add([i, j]);
+            const neighbours = getUnvisitedNeighbours(matrix, visited, i, j);
+            neighbours.forEach(function ([y, x]) {
+                if (matrix[y][x] && !nodesVisited.has(`${y}/${x}`)) {
+                    edge = [
+                        [i, j],
+                        [y, x],
+                    ];
+                    // nodesVisited.add(`${y}/${x}`);
+                }
+                queue.push([y, x]);
+            });
+            if (edge) break;
         }
-        const neighbours = getUnvisitedNeighbours(matrix, visited, i, j);
-        neighbours.forEach(([q, w]) => queue.push([q, w]));
+
+        console.log(edge);
     }
-    return potentialNodes.filter(() => Math.random() > 0.4);
+
+    // let availableRows = [];
+    // let availableColumns = [];
+
+    // for (let i = 0; i < occupied.length; i++) {
+    //     availableRows.push(i);
+    //     availableColumns.push(i);
+    // }
+
+    // availableRows = availableRows.sort(() => Math.random() - 0.5);
+    // availableColumns = availableColumns.sort(() => Math.random() - 0.5);
+
+    // console.log(adjacencyMatrix);
+    // availableRows.forEach(function (row, rIdx) {
+    //     // row.forEach(function () {});
+    // });
 };
 
 export const generateGrid = function (height, width, numberOfNodes) {
@@ -63,6 +108,7 @@ export const generateGrid = function (height, width, numberOfNodes) {
                     source: false,
                     destination: false,
                     gridId: i,
+                    generationVisited: false,
                 };
             } else {
                 potentialRow = Math.floor(Math.random() * height);
@@ -71,18 +117,19 @@ export const generateGrid = function (height, width, numberOfNodes) {
         }
     }
 
-    matrix.flat().filter((x) => x)[
+    const source = matrix.flat().filter((x) => x)[
         Math.floor(Math.random() * numberOfNodes)
-    ].source = true;
+    ];
 
-    matrix.flat().filter((x) => x && !x.source)[
+    source.source = true;
+
+    const destination = matrix.flat().filter((x) => x && !x.source)[
         Math.floor(Math.random() * (numberOfNodes - 1))
-    ].destination = true;
+    ];
 
-    console.log(...matrix.flat().filter((_) => _));
+    destination.destination = true;
 
-    // Generate edges
-    // console.log(generateEdges(matrix, 0, 0));
+    const edges = generateEdges(matrix);
 
     return matrix;
 };
