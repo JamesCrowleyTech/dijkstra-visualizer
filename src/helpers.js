@@ -14,76 +14,127 @@ const generateEmptyMatrix = function (height, width = height) {
 
 const getUnvisitedNeighbours = function (matrix, visited, i, j) {
     const unvisitedNeighbours = [];
-    if (i > 0 && !visited.has([i - 1, j])) unvisitedNeighbours.push([i - 1, j]);
-    if (i < matrix.length - 1 && !visited.has([i + 1, j]))
+    if (i > 0 && !visited[i - 1][j]) unvisitedNeighbours.push([i - 1, j]);
+    if (i < matrix.length - 1 && !visited[i + 1][j])
         unvisitedNeighbours.push([i + 1, j]);
-    if (j > 0 && !visited.has([i, j - 1])) unvisitedNeighbours.push([i, j - 1]);
-    if (j < matrix[0].length - 1 && !visited.has([i, j + 1]))
+    if (j > 0 && !visited[i][j - 1]) unvisitedNeighbours.push([i, j - 1]);
+    if (j < matrix[0].length - 1 && !visited[i][j + 1])
         unvisitedNeighbours.push([i, j + 1]);
     return unvisitedNeighbours;
 };
 
 const generateEdges = function (matrix) {
-    const nodesVisited = new Set();
+    const occupied = matrix.flat().filter((node) => node);
+    const [source] = occupied.filter((node) => node.source);
+    const occupiedNodesVisited = new Set();
+    occupiedNodesVisited.add(`${source.row},${source.column}`);
+    let nodesRemaining = occupied.length;
+    const edges = [];
+    const nodesQueue = new Denque();
+    nodesQueue.push([source.row, source.column]);
 
-    const occupied = matrix.flat().filter((_) => _);
+    // const [nodeY, nodeX] = nodesQueue.shift();
+    // console.log(nodeY, nodeX);
 
-    occupied.forEach((node) => (nodesVisited[node.gridId] = false));
+    console.log(matrix);
 
-    console.log(nodesVisited);
+    let visited;
 
-    const source = occupied.filter((n) => n.source);
+    while (nodesQueue) {
+        if (nodesRemaining <= 1) break;
+        console.log(nodesQueue);
+        const [nodeY, nodeX] = nodesQueue.shift();
+        occupiedNodesVisited.add(`${nodeY},${nodeX}`);
 
-    const adjacencyMatrix = generateEmptyMatrix(occupied.length);
-
-    for (let current = 0; current < occupied.length - 1; current++) {
-        const node = occupied[current];
-        nodesVisited.add(`${node.row}/${node.column}`);
-
-        const visited = new Set();
+        visited = generateEmptyMatrix(matrix.length, matrix[0].length);
 
         const queue = new Denque();
-        queue.push([node.row, node.column]);
+        queue.push([nodeY, nodeX]);
 
-        let edge = null;
+        console.log(nodeY, nodeX);
 
         while (queue) {
-            console.log(queue);
             const [i, j] = queue.shift();
-            visited.add([i, j]);
-            const neighbours = getUnvisitedNeighbours(matrix, visited, i, j);
-            neighbours.forEach(function ([y, x]) {
-                if (matrix[y][x] && !nodesVisited.has(`${y}/${x}`)) {
-                    edge = [
-                        [i, j],
-                        [y, x],
-                    ];
-                    // nodesVisited.add(`${y}/${x}`);
-                }
-                queue.push([y, x]);
-            });
-            if (edge) break;
+            // console.log(i, j);
+            if (visited[i][j]) continue;
+            if (matrix[i][j] && !occupiedNodesVisited.has(`${i},${j}`)) {
+                edges.push([nodeY, nodeX, i, j]);
+                nodesRemaining--;
+                nodesQueue.push([i, j]);
+                break;
+            } else {
+                const neighbours = getUnvisitedNeighbours(
+                    matrix,
+                    visited,
+                    i,
+                    j
+                );
+                neighbours.forEach(([f, g]) => queue.push([f, g]));
+            }
         }
-
-        console.log(edge);
     }
-
-    // let availableRows = [];
-    // let availableColumns = [];
-
-    // for (let i = 0; i < occupied.length; i++) {
-    //     availableRows.push(i);
-    //     availableColumns.push(i);
-    // }
-
-    // availableRows = availableRows.sort(() => Math.random() - 0.5);
-    // availableColumns = availableColumns.sort(() => Math.random() - 0.5);
-
-    // console.log(adjacencyMatrix);
-    // availableRows.forEach(function (row, rIdx) {
-    //     // row.forEach(function () {});
-    // });
+    console.log(edges);
 };
+
+// const nodesVisited = new Set();
+
+// const occupied = matrix.flat().filter((_) => _);
+
+// occupied.forEach((node) => (nodesVisited[node.gridId] = false));
+
+// console.log(nodesVisited);
+
+// const adjacencyMatrix = generateEmptyMatrix(occupied.length);
+
+// for (let current = 0; current < occupied.length - 7; current++) {
+//     const node = occupied[current];
+//     // nodesVisited.add(`${node.row}/${node.column}`);
+//     console.log(node);
+
+//     const visited = new Set();
+
+//     const queue = new Denque();
+//     queue.push([node.row, node.column]);
+
+//     let edge = null;
+
+//     mainQ: while (queue) {
+//         const [i, j] = queue.shift();
+//         visited.add([i, j]);
+//         const neighbours = getUnvisitedNeighbours(matrix, visited, i, j);
+//         neighbours.forEach(function ([y, x]) {
+//             // console.log([y, x]);
+//             if (matrix[y][x] && !nodesVisited.has(`${y}/${x}`)) {
+//                 console.log([y, x], matrix[y][x]);
+//                 edge = [
+//                     [i, j],
+//                     [y, x],
+//                 ];
+//                 nodesVisited.add(`${y}/${x}`);
+//             } else queue.push([y, x]);
+//         });
+//         if (edge) {
+//             console.log(edge);
+//             break mainQ;
+//         }
+//     }
+
+// let availableRows = [];
+// let availableColumns = [];
+
+// for (let i = 0; i < occupied.length; i++) {
+//     availableRows.push(i);
+//     availableColumns.push(i);
+// }
+
+// availableRows = availableRows.sort(() => Math.random() - 0.5);
+// availableColumns = availableColumns.sort(() => Math.random() - 0.5);
+
+// console.log(adjacencyMatrix);
+// availableRows.forEach(function (row, rIdx) {
+//     // row.forEach(function () {});
+// });
+// };
 
 export const generateGrid = function (height, width, numberOfNodes) {
     const matrix = generateEmptyMatrix(height, width);

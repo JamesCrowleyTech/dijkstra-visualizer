@@ -10,7 +10,7 @@ const initialState = {
     speed: 100,
     numberOfRows: 8,
     numberOfColumns: 14,
-    numberOfNodes: 30,
+    numberOfNodes: 10,
 };
 
 initialState.gridMap = generateGrid(
