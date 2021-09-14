@@ -138,34 +138,45 @@ const generateEdges = function (matrix) {
 
 export const generateGrid = function (height, width, numberOfNodes) {
     const matrix = generateEmptyMatrix(height, width);
+    // console.log(...matrix);
+
+    // prettier-ignore
+    // const matrix = [
+    //     [false,false,false,false,false,true,false,false,false,false,true,false,false,false],
+    //     [true,false,false,false,false,false,false,false,false,false,false,false,false,false],
+    //     [false,true,false,false,false,false,false,false,false,false,false,false,false,false],
+    //     [false,false,false,false,false,false,false,false,false,false,false,false,false,true],
+    //     [false,false,false,false,false,false,false,false,false,false,false,false,false,false],
+    //     [false,false,true,false,true,false,false,false,false,false,false,false,false,false],
+    //     [false,false,true,false,false,true,false,false,false,false,false,false,false,false],
+    //     [false,false,false,false,false,false,false,true,false,false,false,false,false,false]
+    // ];
 
     if (height * width < numberOfNodes)
         throw new Error("numberOfNodes overflowed grid dimensions");
 
     // Generate nodes
 
-    for (let i = 0; i < numberOfNodes; i++) {
-        let isPositionDetermined = false;
-        let potentialRow = Math.floor(Math.random() * height);
-        let potentialColumn = Math.floor(Math.random() * width);
+    const allCells = [];
 
-        while (!isPositionDetermined) {
-            if (!matrix[potentialRow][potentialColumn]) {
-                isPositionDetermined = true;
-                matrix[potentialRow][potentialColumn] = {
-                    row: potentialRow,
-                    column: potentialColumn,
-                    edges: [],
-                    source: false,
-                    destination: false,
-                    gridId: i,
-                    generationVisited: false,
-                };
-            } else {
-                potentialRow = Math.floor(Math.random() * height);
-                potentialColumn = Math.floor(Math.random() * width);
-            }
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[0].length; j++) {
+            allCells.push([i, j]);
         }
+    }
+    allCells.sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < numberOfNodes; i++) {
+        const [y, x] = allCells.pop();
+        matrix[y][x] = {
+            row: y,
+            column: x,
+            edges: [],
+            source: false,
+            destination: false,
+            gridId: i,
+            generationVisited: false,
+        };
     }
 
     const source = matrix.flat().filter((x) => x)[
@@ -180,7 +191,7 @@ export const generateGrid = function (height, width, numberOfNodes) {
 
     destination.destination = true;
 
-    const edges = generateEdges(matrix);
+    // const edges = generateEdges(matrix);
 
     return matrix;
 };
