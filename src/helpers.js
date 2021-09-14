@@ -33,16 +33,10 @@ const generateEdges = function (matrix) {
     const nodesQueue = new Denque();
     nodesQueue.push([source.row, source.column]);
 
-    // const [nodeY, nodeX] = nodesQueue.shift();
-    // console.log(nodeY, nodeX);
-
-    console.log(matrix);
-
     let visited;
 
     while (nodesQueue) {
         if (nodesRemaining <= 1) break;
-        console.log(nodesQueue);
         const [nodeY, nodeX] = nodesQueue.shift();
         occupiedNodesVisited.add(`${nodeY},${nodeX}`);
 
@@ -51,12 +45,10 @@ const generateEdges = function (matrix) {
         const queue = new Denque();
         queue.push([nodeY, nodeX]);
 
-        console.log(nodeY, nodeX);
-
         while (queue) {
             const [i, j] = queue.shift();
-            // console.log(i, j);
             if (visited[i][j]) continue;
+            visited[i][j] = true;
             if (matrix[i][j] && !occupiedNodesVisited.has(`${i},${j}`)) {
                 edges.push([nodeY, nodeX, i, j]);
                 nodesRemaining--;
@@ -73,84 +65,12 @@ const generateEdges = function (matrix) {
             }
         }
     }
-    console.log(edges);
+
+    return edges;
 };
-
-// const nodesVisited = new Set();
-
-// const occupied = matrix.flat().filter((_) => _);
-
-// occupied.forEach((node) => (nodesVisited[node.gridId] = false));
-
-// console.log(nodesVisited);
-
-// const adjacencyMatrix = generateEmptyMatrix(occupied.length);
-
-// for (let current = 0; current < occupied.length - 7; current++) {
-//     const node = occupied[current];
-//     // nodesVisited.add(`${node.row}/${node.column}`);
-//     console.log(node);
-
-//     const visited = new Set();
-
-//     const queue = new Denque();
-//     queue.push([node.row, node.column]);
-
-//     let edge = null;
-
-//     mainQ: while (queue) {
-//         const [i, j] = queue.shift();
-//         visited.add([i, j]);
-//         const neighbours = getUnvisitedNeighbours(matrix, visited, i, j);
-//         neighbours.forEach(function ([y, x]) {
-//             // console.log([y, x]);
-//             if (matrix[y][x] && !nodesVisited.has(`${y}/${x}`)) {
-//                 console.log([y, x], matrix[y][x]);
-//                 edge = [
-//                     [i, j],
-//                     [y, x],
-//                 ];
-//                 nodesVisited.add(`${y}/${x}`);
-//             } else queue.push([y, x]);
-//         });
-//         if (edge) {
-//             console.log(edge);
-//             break mainQ;
-//         }
-//     }
-
-// let availableRows = [];
-// let availableColumns = [];
-
-// for (let i = 0; i < occupied.length; i++) {
-//     availableRows.push(i);
-//     availableColumns.push(i);
-// }
-
-// availableRows = availableRows.sort(() => Math.random() - 0.5);
-// availableColumns = availableColumns.sort(() => Math.random() - 0.5);
-
-// console.log(adjacencyMatrix);
-// availableRows.forEach(function (row, rIdx) {
-//     // row.forEach(function () {});
-// });
-// };
 
 export const generateGrid = function (height, width, numberOfNodes) {
     const matrix = generateEmptyMatrix(height, width);
-    // console.log(...matrix);
-
-    // prettier-ignore
-    // const matrix = [
-    //     [false,false,false,false,false,true,false,false,false,false,true,false,false,false],
-    //     [true,false,false,false,false,false,false,false,false,false,false,false,false,false],
-    //     [false,true,false,false,false,false,false,false,false,false,false,false,false,false],
-    //     [false,false,false,false,false,false,false,false,false,false,false,false,false,true],
-    //     [false,false,false,false,false,false,false,false,false,false,false,false,false,false],
-    //     [false,false,true,false,true,false,false,false,false,false,false,false,false,false],
-    //     [false,false,true,false,false,true,false,false,false,false,false,false,false,false],
-    //     [false,false,false,false,false,false,false,true,false,false,false,false,false,false]
-    // ];
 
     if (height * width < numberOfNodes)
         throw new Error("numberOfNodes overflowed grid dimensions");
@@ -191,7 +111,7 @@ export const generateGrid = function (height, width, numberOfNodes) {
 
     destination.destination = true;
 
-    // const edges = generateEdges(matrix);
+    const edges = generateEdges(matrix);
 
     return matrix;
 };

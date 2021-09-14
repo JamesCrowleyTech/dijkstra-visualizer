@@ -18,7 +18,7 @@ export default function Grid() {
     // }
     // console.log(occupiedIndices);
 
-    console.log(state);
+    // console.log(state);
 
     return (
         <div className="section-grid">
