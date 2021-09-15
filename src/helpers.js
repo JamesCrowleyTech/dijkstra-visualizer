@@ -53,6 +53,7 @@ const generateEdges = function (matrix) {
                 edges.push([nodeY, nodeX, i, j]);
                 nodesRemaining--;
                 nodesQueue.push([i, j]);
+                matrix[nodeY][nodeX].edges.push([i, j]);
                 break;
             } else {
                 const neighbours = getUnvisitedNeighbours(
@@ -68,6 +69,8 @@ const generateEdges = function (matrix) {
 
     return edges;
 };
+
+// const renderEdges = function (matrix, edges) {};
 
 export const generateGrid = function (height, width, numberOfNodes) {
     const matrix = generateEmptyMatrix(height, width);
@@ -110,8 +113,10 @@ export const generateGrid = function (height, width, numberOfNodes) {
     ];
 
     destination.destination = true;
-
+    console.log(matrix);
     const edges = generateEdges(matrix);
+
+    // renderEdges(matrix, edges);
 
     return matrix;
 };
