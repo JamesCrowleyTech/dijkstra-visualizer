@@ -3,11 +3,17 @@
     padding: 5rem;
 }
 
+.grid-container {
+    height: 100%;
+    padding: 3rem;
+    background-color: #ddd;
+}
+
 .grid {
     background: #ddd;
     height: 100%;
     display: grid;
-    padding: 3rem;
+    position: relative;
 }
 
 .grid-item {
@@ -20,4 +26,11 @@
     justify-self: center;
     align-self: center;
     /* position: absolute; */
+}
+
+.edge {
+    height: 3px;
+    background-color: #222;
+    /* width: 50vw; */
+    position: absolute;
 }

@@ -113,7 +113,6 @@ export const generateGrid = function (height, width, numberOfNodes) {
     ];
 
     destination.destination = true;
-    console.log(matrix);
     const edges = generateEdges(matrix);
 
     // renderEdges(matrix, edges);
