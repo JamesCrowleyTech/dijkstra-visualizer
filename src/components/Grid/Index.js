@@ -84,42 +84,22 @@ export default function Grid() {
 
                                 if (!grid) return null;
 
-                                // console.log([y1, x1, y2, x2]);
-                                // console.log(gridHeight / state.numberOfRows);
-                                // console.log(gridWidth / state.numberOfColumns);
-                                // console.log(
-                                //     (gridHeight / state.numberOfRows) *
-                                //         Math.abs(y1 - y2)
-                                // );
-                                // console.log(
-                                //     (gridWidth / state.numberOfColumns) *
-                                //         Math.abs(x1 - x2)
-                                // );
-
-                                console.log(
-                                    Math.sqrt(
-                                        ((gridHeight / state.numberOfRows) *
-                                            Math.abs(y1 - y2)) **
-                                            2 +
-                                            ((gridWidth /
-                                                state.numberOfColumns) *
-                                                Math.abs(x1 - x2)) **
-                                                2
-                                    )
-                                );
-
                                 return (
                                     <div
                                         className="edge"
                                         style={{
                                             // prettier-ignore
-                                            width: `${Math.sqrt(((gridHeight / state.numberOfRows) * Math.abs(y1 - y2)) ** 2 + ((gridWidth / state.numberOfColumns) * Math.abs(x1 - x2) ** 2))}px`,
-                                            // width: `${gridWidth*gridHeight}px`,
-                                            // width: `${
-                                            //     (gridWidth + gridHeight) * 0.2
-                                            // }px`,
+                                            width: `${Math.sqrt((((gridHeight / state.numberOfRows) * Math.abs(y1 - y2)) ** 2) + 
+                                                (((gridWidth / state.numberOfColumns) * Math.abs(x1 - x2)) ** 2))}px`,
+
                                             // prettier-ignore
-                                            top: `${`${(y1 + .5)* (gridHeight / state.numberOfRows)}px`}`,
+                                            left: `${`${((x1 + x2) / 2 + 0.5) *(gridWidth /state.numberOfColumns)}px`}`,
+
+                                            // prettier-ignore
+                                            top: `${`${((y1 + y2) / 2 + .5)* (gridHeight / state.numberOfRows)}px`}`,
+
+                                            // prettier-ignore
+                                            transform: `translateX(-50%)`,
                                         }}
                                         key={`${y1}${y2}${x1}${x2}`}
                                     ></div>
