@@ -8,8 +8,8 @@ import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
-    numberOfRows: 8,
-    numberOfColumns: 14,
+    numberOfRows: 15,
+    numberOfColumns: 24,
     numberOfNodes: 10,
 };
 
