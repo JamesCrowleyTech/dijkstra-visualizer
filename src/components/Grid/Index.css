@@ -30,7 +30,8 @@
 
 .edge {
     height: 3px;
-    background-color: #222;
+    background: linear-gradient(to right, red 0% 50%, #222 50% 100%);
+    background: #222;
     z-index: 0;
     position: absolute;
 }

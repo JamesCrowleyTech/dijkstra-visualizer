@@ -8,9 +8,9 @@ import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
-    numberOfRows: 15,
-    numberOfColumns: 24,
-    numberOfNodes: 10,
+    numberOfRows: 13,
+    numberOfColumns: 20,
+    numberOfNodes: 12,
 };
 
 initialState.gridMap = generateGrid(

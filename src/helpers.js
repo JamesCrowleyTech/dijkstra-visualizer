@@ -23,99 +23,120 @@ const getUnvisitedNeighbours = function (matrix, visited, i, j) {
     return unvisitedNeighbours;
 };
 
-const generateEdges = function (matrix) {
-    const occupied = matrix.flat().filter((node) => node);
-    const [source] = occupied.filter((node) => node.source);
-    const occupiedNodesVisited = new Set();
-    occupiedNodesVisited.add(`${source.row},${source.column}`);
-    let nodesRemaining = occupied.length;
-    const edges = [];
-    const nodesQueue = new Denque();
-    nodesQueue.push([source.row, source.column]);
-
-    let visited;
-
-    while (nodesQueue) {
-        if (nodesRemaining <= 1) break;
-        const [nodeY, nodeX] = nodesQueue.shift();
-        occupiedNodesVisited.add(`${nodeY},${nodeX}`);
-
-        visited = generateEmptyMatrix(matrix.length, matrix[0].length);
-
-        const queue = new Denque();
-        queue.push([nodeY, nodeX]);
-
-        while (queue) {
-            const [i, j] = queue.shift();
-            if (visited[i][j]) continue;
-            visited[i][j] = true;
-            if (matrix[i][j] && !occupiedNodesVisited.has(`${i},${j}`)) {
-                edges.push([nodeY, nodeX, i, j]);
-                nodesRemaining--;
-                nodesQueue.push([i, j]);
-                matrix[nodeY][nodeX].edges.push([i, j]);
-                break;
-            } else {
-                const neighbours = getUnvisitedNeighbours(
-                    matrix,
-                    visited,
-                    i,
-                    j
-                );
-                neighbours.forEach(([f, g]) => queue.push([f, g]));
-            }
-        }
-    }
-
-    return edges;
-};
-
-// const renderEdges = function (matrix, edges) {};
-
 export const generateGrid = function (height, width, numberOfNodes) {
     const matrix = generateEmptyMatrix(height, width);
 
-    if (height * width < numberOfNodes)
-        throw new Error("numberOfNodes overflowed grid dimensions");
+    const outerVisited = generateEmptyMatrix(height, width);
 
-    // Generate nodes
+    const sourceX = Math.floor(Math.random() * width);
+    const sourceY = Math.floor(Math.random() * height);
 
-    const allCells = [];
+    const edgesPerNode = 2;
+    const range = [5, 12];
 
-    for (let i = 0; i < matrix.length; i++) {
-        for (let j = 0; j < matrix[0].length; j++) {
-            allCells.push([i, j]);
+    const availableGridIds = [];
+
+    for (let i = 0; i < numberOfNodes; i++) availableGridIds.push(i);
+
+    matrix[sourceY][sourceX] = {
+        row: sourceY,
+        column: sourceX,
+        edges: [],
+        source: true,
+        destination: false,
+        gridId: availableGridIds.pop(),
+    };
+
+    const source = matrix[sourceY][sourceX];
+
+    let nodesToCreate = numberOfNodes - 1;
+
+    const outerQueue = new Denque();
+    outerQueue.push(source);
+
+    while (nodesToCreate) {
+        const node = outerQueue.shift();
+
+        const { row: nodeY, column: nodeX } = node;
+
+        let potentialConnectedNodes = [];
+
+        const innerQueue = new Denque();
+        innerQueue.push([nodeY, nodeX]);
+
+        const innerVisited = generateEmptyMatrix(height, width);
+
+        let isSearchComplete = false;
+
+        while (!isSearchComplete) {
+            const [currY, currX] = innerQueue.shift();
+
+            if (innerVisited[currY][currX]) continue;
+
+            innerVisited[currY][currX] = true;
+
+            if (Math.abs(currY - nodeY) + Math.abs(currX - nodeX) > range[1]) {
+                isSearchComplete = true;
+                break;
+            }
+
+            potentialConnectedNodes.push([currY, currX]);
+
+            const neighbours = getUnvisitedNeighbours(
+                matrix,
+                innerVisited,
+                currY,
+                currX
+            );
+
+            neighbours.forEach(([i, j]) => innerQueue.push([i, j]));
+        }
+
+        potentialConnectedNodes.forEach(function ([y, x]) {
+            if (Math.random > 0.2) outerVisited[y][x] = true;
+        });
+
+        potentialConnectedNodes = potentialConnectedNodes
+            .filter(function ([currY, currX]) {
+                const distanceFromParent =
+                    Math.abs(currY - nodeY) + Math.abs(currX - nodeX);
+                if (
+                    distanceFromParent < range[0] ||
+                    distanceFromParent > range[1]
+                )
+                    return false;
+
+                if (outerVisited[currY][currX]) return false;
+
+                return true;
+            })
+            .sort(() => Math.random() - 0.5);
+
+        for (let i = 0; i < edgesPerNode; i++) {
+            const newNeighbour = potentialConnectedNodes.pop();
+            const [newNeighbourY, newNeighbourX] = newNeighbour;
+
+            matrix[newNeighbourY][newNeighbourX] = {
+                row: newNeighbourY,
+                column: newNeighbourX,
+                edges: [],
+                source: false,
+                destination: false,
+                gridId: availableGridIds.pop(),
+            };
+
+            matrix[nodeY][nodeX].edges.push([newNeighbourY, newNeighbourX]);
+
+            nodesToCreate--;
+            if (!nodesToCreate) break;
+
+            if (nodesToCreate === 1)
+                matrix[newNeighbourY][newNeighbourX].destination = true;
+
+            outerVisited[nodeY][nodeX] = true;
+            outerQueue.push(matrix[newNeighbourY][newNeighbourX]);
         }
     }
-    allCells.sort(() => Math.random() - 0.5);
-
-    for (let i = 0; i < numberOfNodes; i++) {
-        const [y, x] = allCells.pop();
-        matrix[y][x] = {
-            row: y,
-            column: x,
-            edges: [],
-            source: false,
-            destination: false,
-            gridId: i,
-            generationVisited: false,
-        };
-    }
-
-    const source = matrix.flat().filter((x) => x)[
-        Math.floor(Math.random() * numberOfNodes)
-    ];
-
-    source.source = true;
-
-    const destination = matrix.flat().filter((x) => x && !x.source)[
-        Math.floor(Math.random() * (numberOfNodes - 1))
-    ];
-
-    destination.destination = true;
-    const edges = generateEdges(matrix);
-
-    // renderEdges(matrix, edges);
 
     return matrix;
 };
