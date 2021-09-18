@@ -43,7 +43,7 @@ export default function Grid() {
                         gridTemplateRows: `repeat(${numberOfRows}, 1fr)`,
                     }}
                 >
-                    {state.gridMap
+                    {gridMap
                         .flat()
                         .filter((_) => _)
                         .map(function (node) {
@@ -70,7 +70,7 @@ export default function Grid() {
                                 ></div>
                             );
                         })}
-                    {state.gridMap
+                    {gridMap
                         .flat()
                         .filter((_) => _)
                         .map(function (node) {
@@ -82,10 +82,10 @@ export default function Grid() {
                                 ];
                                 const grid = document.querySelector(".grid");
                                 const heightDiff =
-                                    (gridHeight / state.numberOfRows) *
+                                    (gridHeight / numberOfRows) *
                                     Math.abs(y1 - y2);
                                 const widthDiff =
-                                    (gridWidth / state.numberOfColumns) *
+                                    (gridWidth / numberOfColumns) *
                                     Math.abs(x1 - x2);
                                 const hypotenuse = Math.sqrt(
                                     widthDiff ** 2 + heightDiff ** 2
@@ -100,15 +100,11 @@ export default function Grid() {
                                 if (y1 === y2 && x1 < x2) rotation = 0;
                                 if (y1 === y2 && x1 > x2) rotation = 180;
 
-                                // // prettier-ignore
                                 if (x1 < x2 && y1 < y2)
                                     rotation =
                                         radiansToDeg *
                                         Math.asin(heightDiff / hypotenuse);
 
-                                grid && console.log([y1, x1, y2, x2]);
-
-                                // // prettier-ignore
                                 if (x1 < x2 && y1 > y2)
                                     rotation =
                                         radiansToDeg *
@@ -136,15 +132,14 @@ export default function Grid() {
                                         className="edge"
                                         style={{
                                             // prettier-ignore
-                                            width: `${Math.sqrt(heightDiff ** 2 + widthDiff ** 2)}px`,
+                                            width: `${hypotenuse}px`,
 
                                             // prettier-ignore
-                                            left: `${`${((x1 + x2) / 2 + 0.5) *(gridWidth /state.numberOfColumns)}px`}`,
+                                            left: `${`${((x1 + x2) / 2 + 0.5) * (gridWidth / numberOfColumns)}px`}`,
 
                                             // prettier-ignore
-                                            top: `${`${((y1 + y2) / 2 + .5)* (gridHeight / state.numberOfRows)}px`}`,
+                                            top: `${`${((y1 + y2) / 2 + .5) * (gridHeight / numberOfRows)}px`}`,
 
-                                            // prettier-ignore
                                             transform: `translateX(-50%) rotate(${rotation}deg)`,
                                         }}
                                         key={`${y1}${y2}${x1}${x2}`}
