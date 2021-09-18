@@ -12,9 +12,8 @@
     align-items: center;
 }
 
-.selection > * {
-    margin-right: 0.4rem;
-    margin-left: 0.4rem;
+.selection > :not(:first-child) {
+    margin: 0 0.6rem;
 }
 
 .selection-title {
@@ -100,5 +99,21 @@
 }
 
 .button-generate:hover {
+    filter: brightness(95%);
+}
+
+.button-run {
+    background-color: rgb(255, 14, 86);
+    border: none;
+    align-self: stretch;
+    padding: 1rem 1.6rem;
+    font-size: 1.7rem;
+    font-family: inherit;
+    outline: none;
+    border-radius: 1000rem;
+    transition: all 0.17s;
+    /* letter-spacing: 1px; */
+}
+.button-run:hover {
     filter: brightness(95%);
 }

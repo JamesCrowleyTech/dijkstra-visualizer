@@ -63,7 +63,9 @@ export default function SelectionBar() {
         };
 
         const generateListener = function () {
+            dispatch({ type: "SET_SHOULDCREATENODES_TRUE", payload: null });
             dispatch({ type: "NEW_GRID", payload: null });
+
             // console.log(state.gridMap);
         };
 
@@ -89,6 +91,10 @@ export default function SelectionBar() {
                 id="button-generate"
             >
                 GENERATE!
+            </button>
+
+            <button type="button" className="button-run" id="button-run">
+                RUN DIJKSTRA!
             </button>
             <div className="slider-container">
                 <h2 className="slider-title">Speed:</h2>

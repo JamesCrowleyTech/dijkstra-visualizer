@@ -23,8 +23,15 @@ const getUnvisitedNeighbours = function (matrix, visited, i, j) {
     return unvisitedNeighbours;
 };
 
-export const generateGrid = function (height, width, numberOfNodes) {
+export const generateGrid = function (
+    height,
+    width,
+    numberOfNodes,
+    shouldCreateNodes
+) {
     const matrix = generateEmptyMatrix(height, width);
+
+    if (!shouldCreateNodes) return matrix;
 
     const outerVisited = generateEmptyMatrix(height, width);
 
@@ -32,7 +39,7 @@ export const generateGrid = function (height, width, numberOfNodes) {
     const sourceY = Math.floor(Math.random() * height);
 
     const edgesPerNode = 2;
-    const range = [5, 12];
+    const range = [8, 24];
 
     const availableGridIds = [];
 
@@ -93,8 +100,11 @@ export const generateGrid = function (height, width, numberOfNodes) {
         }
 
         potentialConnectedNodes.forEach(function ([y, x]) {
-            if (Math.random > 0.2) outerVisited[y][x] = true;
+            // console.log([y, x]);
+            if (Math.random() > 0.6) outerVisited[y][x] = true;
         });
+
+        // console.log(outerVisited);
 
         potentialConnectedNodes = potentialConnectedNodes
             .filter(function ([currY, currX]) {

@@ -18,18 +18,18 @@
 
 .grid-item {
     display: inline-block;
-    height: 2.4rem;
-    width: 2.4rem;
+    height: 1.4rem;
+    width: 1.4rem;
     border-radius: 1000rem;
     background-color: var(--clr-primary);
-    border: 3px solid black;
+    border: 2px solid black;
     justify-self: center;
     align-self: center;
     z-index: 1;
 }
 
 .edge {
-    height: 3px;
+    height: 2px;
     background: linear-gradient(to right, red 0% 50%, #222 50% 100%);
     background: #222;
     z-index: 0;

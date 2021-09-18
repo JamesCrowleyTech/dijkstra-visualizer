@@ -8,15 +8,17 @@ import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
-    numberOfRows: 13,
-    numberOfColumns: 20,
+    numberOfRows: 30,
+    numberOfColumns: 50,
     numberOfNodes: 12,
+    shouldCreateNodes: false,
 };
 
 initialState.gridMap = generateGrid(
     initialState.numberOfRows,
     initialState.numberOfColumns,
-    initialState.numberOfNodes
+    initialState.numberOfNodes,
+    initialState.shouldCreateNodes
 );
 
 const AppContext = React.createContext(initialState);

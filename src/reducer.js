@@ -9,8 +9,15 @@ export default function reducer(state, action) {
             gridMap: generateGrid(
                 state.numberOfRows,
                 state.numberOfColumns,
-                state.numberOfNodes
+                state.numberOfNodes,
+                state.shouldCreateNodes
             ),
+        };
+    }
+    if (action.type === "SET_SHOULDCREATENODES_TRUE") {
+        return {
+            ...state,
+            shouldCreateNodes: true,
         };
     }
 }
