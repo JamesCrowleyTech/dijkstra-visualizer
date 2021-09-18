@@ -11,6 +11,8 @@ export default function Grid() {
     let [gridHeight, setGridHeight] = useState(null);
     let [isGridLoaded, setIsGridLoaded] = useState(false);
 
+    console.log(gridMap);
+
     useEffect(
         function () {
             const mainGrid = document.querySelector(".grid");
@@ -121,8 +123,8 @@ export default function Grid() {
                                 if (x1 > x2 && y1 > y2) {
                                     rotation =
                                         radiansToDeg *
-                                            Math.asin(heightDiff / hypotenuse) -
-                                        0;
+                                            Math.asin(heightDiff / hypotenuse) +
+                                        180;
                                 }
 
                                 if (!grid) return null;

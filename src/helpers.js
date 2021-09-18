@@ -35,11 +35,15 @@ export const generateGrid = function (
 
     const outerVisited = generateEmptyMatrix(height, width);
 
-    const sourceX = Math.floor(Math.random() * width);
-    const sourceY = Math.floor(Math.random() * height);
+    const sourceX = Math.floor(
+        Math.random() * Math.floor(width / 2) + Math.floor(width / 4)
+    );
+    const sourceY = Math.floor(
+        Math.random() * Math.floor(height / 2) + Math.floor(height / 4)
+    );
 
     const edgesPerNode = 2;
-    const range = [8, 24];
+    const range = [9, 20];
 
     const availableGridIds = [];
 
@@ -101,7 +105,7 @@ export const generateGrid = function (
 
         potentialConnectedNodes.forEach(function ([y, x]) {
             // console.log([y, x]);
-            if (Math.random() > 0.6) outerVisited[y][x] = true;
+            // if (Math.random() > 0.6) outerVisited[y][x] = true;
         });
 
         // console.log(outerVisited);
