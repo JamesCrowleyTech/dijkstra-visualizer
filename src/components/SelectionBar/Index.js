@@ -111,6 +111,25 @@ export default function SelectionBar() {
 
                 <h2 className="slider-display">{state.speed}%</h2>
             </div>
+            <div className="key-container">
+                <h2 className="key-title">KEY</h2>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">Node:</h3>
+                    <div className="key-node"></div>
+                </div>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">Start Node:</h3>
+                    <div className="key-node key-source"></div>
+                </div>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">End Node:</h3>
+                    <div className="key-node key-destination"></div>
+                </div>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">Edge:</h3>
+                    <div className="key-edge"></div>
+                </div>
+            </div>
         </div>
     );
 }

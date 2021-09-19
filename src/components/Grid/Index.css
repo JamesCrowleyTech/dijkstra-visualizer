@@ -1,6 +1,6 @@
 .section-grid {
     background: whitesmoke;
-    padding: 5rem;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 
 .grid-container {
@@ -18,8 +18,8 @@
 
 .grid-item {
     display: inline-block;
-    height: 1.3rem;
-    width: 1.3rem;
+    height: 1.4rem;
+    width: 1.4rem;
     border-radius: 1000rem;
     background-color: var(--clr-primary);
     border: 2px solid black;

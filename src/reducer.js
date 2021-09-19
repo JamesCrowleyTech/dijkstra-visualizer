@@ -20,4 +20,10 @@ export default function reducer(state, action) {
             shouldCreateNodes: true,
         };
     }
+    if (action.type === "TOGGLE_ISRUNNING") {
+        return {
+            ...state,
+            isRunning: !state.isRunning,
+        };
+    }
 }

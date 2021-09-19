@@ -13,22 +13,21 @@
 }
 
 .selection > :not(:first-child) {
-    margin: 0 0.6rem;
+    margin: 0 0.5rem;
 }
 
 .selection-title {
     color: white;
-    padding: 1.4rem 2rem;
+    padding: 1rem 2rem;
     white-space: nowrap;
 }
 
 .slider-container {
     height: 100%;
     background-color: whitesmoke;
-    padding: 1rem;
-    padding-right: 6.6rem;
+    padding: 0 6.6rem 0 0.7rem;
     border-radius: 1000rem;
-    /* width: 27.6rem; */
+
     position: relative;
     display: flex;
     align-items: center;
@@ -36,7 +35,7 @@
 
 .slider-frame {
     background-color: whitesmoke;
-    padding: 0.7rem 1rem;
+    padding: 0.6rem 0.9rem;
 
     display: inline-flex;
     border: 1px solid grey;
@@ -87,7 +86,8 @@
 }
 
 .button-generate {
-    background-color: rgb(255, 128, 128);
+    background-color: rgb(253, 29, 21);
+    color: black;
     border: none;
     align-self: stretch;
     padding: 1rem 1.6rem;
@@ -96,14 +96,16 @@
     outline: none;
     border-radius: 1000rem;
     transition: all 0.17s;
+    cursor: pointer;
 }
 
 .button-generate:hover {
-    filter: brightness(95%);
+    filter: brightness(105%);
 }
 
 .button-run {
-    background-color: rgb(255, 14, 86);
+    background-color: rgb(253, 29, 21);
+    color: black;
     border: none;
     align-self: stretch;
     padding: 1rem 1.6rem;
@@ -112,8 +114,80 @@
     outline: none;
     border-radius: 1000rem;
     transition: all 0.17s;
-    /* letter-spacing: 1px; */
+    cursor: pointer;
 }
 .button-run:hover {
-    filter: brightness(95%);
+    filter: brightness(105%);
+}
+
+.key-container {
+    background-color: whitesmoke;
+    color: #222;
+    align-self: stretch;
+    padding: 1rem 1.6rem;
+    font-family: inherit;
+    outline: none;
+    display: flex;
+    align-items: center;
+    border-radius: 1000rem;
+}
+
+.key-container > * {
+    position: relative;
+}
+
+.key-container > :not(:first-child) {
+    margin-left: 0.7rem;
+}
+
+.key-container > :not(:last-child) {
+    margin-right: 0.7rem;
+}
+
+.key-container > :not(:first-child)::before {
+    content: "";
+    height: 100%;
+    width: 1px;
+    background-color: grey;
+    position: absolute;
+    top: 0;
+    left: -0.7rem;
+}
+
+.key-title {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+.key-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.key-item-title {
+    margin-right: 0.3rem;
+}
+
+.key-node {
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 1000rem;
+    border: 2px solid #111;
+    background-color: var(--clr-primary);
+}
+
+.key-source {
+    background-color: yellow;
+}
+
+.key-destination {
+    background-color: blue;
+}
+
+.key-edge {
+    width: 4rem;
+    height: 3px;
+    background-color: black;
+    transform: translateY(0.1rem);
 }
