@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./Index.css";
 import { AppContext } from "../App/App.js";
+import { runDijkstra } from "../../helpers";
 
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
@@ -11,10 +12,9 @@ export default function Grid() {
     let [gridHeight, setGridHeight] = useState(null);
     let [isGridLoaded, setIsGridLoaded] = useState(false);
 
-    console.log(gridMap);
-
     useEffect(
         function () {
+            console.log("useeffect called");
             const mainGrid = document.querySelector(".grid");
 
             setIsGridLoaded(true);
@@ -28,8 +28,15 @@ export default function Grid() {
 
             window.addEventListener("resize", handleResize);
 
+            const btnRun = document.getElementById("button-run");
+
+            const bindedRunDijkstra = runDijkstra.bind({ gridMap });
+
+            btnRun.addEventListener("click", bindedRunDijkstra);
+
             return function () {
                 window.removeEventListener("resize", handleResize);
+                btnRun.removeEventListener("click", bindedRunDijkstra);
             };
         },
         [gridWidth, gridHeight, isGridLoaded]

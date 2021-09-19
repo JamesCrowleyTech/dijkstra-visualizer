@@ -163,6 +163,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 1.8rem;
 }
 
 .key-item-title {
@@ -175,6 +176,7 @@
     border-radius: 1000rem;
     border: 2px solid #111;
     background-color: var(--clr-primary);
+    align-self: stretch;
 }
 
 .key-source {

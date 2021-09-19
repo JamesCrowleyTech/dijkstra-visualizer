@@ -10,7 +10,7 @@ const initialState = {
     speed: 100,
     numberOfRows: 23,
     numberOfColumns: 30,
-    numberOfNodes: 12,
+    numberOfNodes: 3,
     shouldCreateNodes: false,
     isRunning: false,
 };

@@ -43,7 +43,7 @@ export const generateGrid = function (
     );
 
     const edgesPerNode = 2;
-    const range = [9, 20];
+    const range = [10, 20];
 
     const availableGridIds = [];
 
@@ -154,3 +154,5 @@ export const generateGrid = function (
 
     return matrix;
 };
+
+export const runDijkstra = function () {};
