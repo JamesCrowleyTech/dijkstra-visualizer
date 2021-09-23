@@ -14,7 +14,6 @@ export default function Grid() {
 
     useEffect(
         function () {
-            console.log("useeffect called");
             const mainGrid = document.querySelector(".grid");
 
             setIsGridLoaded(true);
@@ -39,7 +38,7 @@ export default function Grid() {
                 btnRun.removeEventListener("click", bindedRunDijkstra);
             };
         },
-        [gridWidth, gridHeight, isGridLoaded]
+        [gridWidth, gridHeight, isGridLoaded, gridMap]
     );
 
     return (
@@ -138,6 +137,7 @@ export default function Grid() {
 
                                 return (
                                     <div
+                                        id={`edge--${y1},${x1},${y2},${x2}`}
                                         className="edge"
                                         style={{
                                             // prettier-ignore

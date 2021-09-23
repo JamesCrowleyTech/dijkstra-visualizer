@@ -43,7 +43,7 @@ export const generateGrid = function (
     );
 
     const edgesPerNode = 2;
-    const range = [10, 20];
+    const range = [3, 22];
 
     const availableGridIds = [];
 
@@ -108,8 +108,6 @@ export const generateGrid = function (
             // if (Math.random() > 0.6) outerVisited[y][x] = true;
         });
 
-        // console.log(outerVisited);
-
         potentialConnectedNodes = potentialConnectedNodes
             .filter(function ([currY, currX]) {
                 const distanceFromParent =
@@ -155,4 +153,52 @@ export const generateGrid = function (
     return matrix;
 };
 
-export const runDijkstra = function () {};
+export const runDijkstra = function () {
+    const { gridMap: matrix } = this;
+    for (let i = 0, len1 = matrix.length; i < len1; i++) {
+        for (let j = 0, len2 = matrix[0].length; j < len2; j++) {
+            if (matrix[i][j]) console.log(matrix[i][j].edges);
+        }
+    }
+
+    const allNodes = matrix.flat().filter((node) => node);
+
+    const sourceNode = allNodes.filter((node) => node.source);
+
+    const gridIdToNode = {};
+    const gridEdgeIdToEdge = {};
+    const prevNodeMap = {};
+    const nodeDistancesFromSource = {};
+    const unVisitedNodes = new Set();
+    const visitedNodes = [];
+    const graph = {};
+
+    const edges = document.querySelectorAll(".edge");
+
+    edges.forEach(function (edge) {
+        const id = edge.id;
+        gridEdgeIdToEdge[id.match(/\d+/g).join(",")] = edge;
+    });
+
+    allNodes.forEach(function (node) {
+        gridIdToNode[node.gridId] = node;
+        prevNodeMap[node.gridId] = null;
+        unVisitedNodes.add(node.gridId);
+        nodeDistancesFromSource[node.gridId] = Number.POSITIVE_INFINITY;
+        graph[node.gridId] = {};
+
+        node.renderedEdges = {};
+
+        node.edges.forEach(function (edge) {
+            const coords = [node.row, node.column, ...edge];
+            const edgeId = `${coords.join(",")}`;
+            const renderedEdge = gridEdgeIdToEdge[edgeId];
+            graph[node.gridId][edgeId] = parseInt(renderedEdge.style.width);
+            node.renderedEdges.edgeId = renderedEdge;
+        });
+    });
+
+    console.log(graph);
+
+    // for (let i = 0, len = unvisitedNodes.length; i < len; i++) unvisitedNodes.
+};

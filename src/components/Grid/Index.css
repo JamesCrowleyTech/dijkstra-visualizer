@@ -25,13 +25,30 @@
     border: 2px solid black;
     justify-self: center;
     align-self: center;
-    z-index: 1;
+    z-index: 2;
 }
 
 .edge {
     height: 2px;
-    background: linear-gradient(to right, red 0% 50%, #222 50% 100%);
-    background: #222;
+    background: linear-gradient(
+        to right,
+        rgb(0, 196, 0) 0% 33.3333%,
+        yellow 33.3333% 66.6667%,
+        black 66.6667% 100%
+    );
+    background-size: 300% 100%;
+    background-position: 100% 0%;
     z-index: 0;
     position: absolute;
+    transition: background-position 0.4s linear;
+}
+
+.edge-traversing {
+    background-position: 50% 0%;
+    z-index: 1;
+}
+
+.edge-final {
+    background-position: 0% 0%;
+    z-index: 1;
 }
