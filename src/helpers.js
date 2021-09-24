@@ -1,4 +1,6 @@
 import Denque from "denque";
+import cloneDeep from "lodash.clonedeep";
+import { isEmpty } from "lodash";
 
 const generateEmptyMatrix = function (height, width = height) {
     const matrix = [];
@@ -43,7 +45,7 @@ export const generateGrid = function (
     );
 
     const edgesPerNode = 2;
-    const range = [3, 22];
+    const range = [1, 6];
 
     const availableGridIds = [];
 
@@ -55,7 +57,7 @@ export const generateGrid = function (
         edges: [],
         source: true,
         destination: false,
-        gridId: availableGridIds.pop(),
+        gridId: `node--${sourceY},${sourceX}`,
     };
 
     const source = matrix[sourceY][sourceX];
@@ -134,7 +136,7 @@ export const generateGrid = function (
                 edges: [],
                 source: false,
                 destination: false,
-                gridId: availableGridIds.pop(),
+                gridId: `node--${newNeighbourY},${newNeighbourX}`,
             };
 
             matrix[nodeY][nodeX].edges.push([newNeighbourY, newNeighbourX]);
@@ -155,22 +157,23 @@ export const generateGrid = function (
 
 export const runDijkstra = function () {
     const { gridMap: matrix } = this;
-    for (let i = 0, len1 = matrix.length; i < len1; i++) {
-        for (let j = 0, len2 = matrix[0].length; j < len2; j++) {
-            if (matrix[i][j]) console.log(matrix[i][j].edges);
-        }
-    }
+    // for (let i = 0, len1 = matrix.length; i < len1; i++) {
+    //     for (let j = 0, len2 = matrix[0].length; j < len2; j++) {
+    //         if (matrix[i][j]) console.log(matrix[i][j].edges);
+    //     }
+    // }
 
     const allNodes = matrix.flat().filter((node) => node);
 
-    const sourceNode = allNodes.filter((node) => node.source);
+    const sourceNode = allNodes.find((node) => node.source).gridId;
+
+    const destinationNode = allNodes.find((node) => node.destination).gridId;
 
     const gridIdToNode = {};
     const gridEdgeIdToEdge = {};
-    const prevNodeMap = {};
-    const nodeDistancesFromSource = {};
-    const unVisitedNodes = new Set();
-    const visitedNodes = [];
+
+    const predecessor = {};
+    const shortestDistance = {};
     const graph = {};
 
     const edges = document.querySelectorAll(".edge");
@@ -182,9 +185,9 @@ export const runDijkstra = function () {
 
     allNodes.forEach(function (node) {
         gridIdToNode[node.gridId] = node;
-        prevNodeMap[node.gridId] = null;
-        unVisitedNodes.add(node.gridId);
-        nodeDistancesFromSource[node.gridId] = Number.POSITIVE_INFINITY;
+        predecessor[node.gridId] = null;
+        shortestDistance[node.gridId] = Number.POSITIVE_INFINITY;
+
         graph[node.gridId] = {};
 
         node.renderedEdges = {};
@@ -193,12 +196,55 @@ export const runDijkstra = function () {
             const coords = [node.row, node.column, ...edge];
             const edgeId = `${coords.join(",")}`;
             const renderedEdge = gridEdgeIdToEdge[edgeId];
-            graph[node.gridId][edgeId] = parseInt(renderedEdge.style.width);
-            node.renderedEdges.edgeId = renderedEdge;
+            graph[node.gridId][`node--${edge.join(",")}`] = parseFloat(
+                renderedEdge.style.width
+            );
         });
     });
 
-    console.log(graph);
+    const unVisitedNodes = cloneDeep(graph);
 
-    // for (let i = 0, len = unvisitedNodes.length; i < len; i++) unvisitedNodes.
+    shortestDistance[sourceNode] = 0;
+
+    let incr = 0;
+
+    // console.log(shortestDistance);
+
+    while (!isEmpty(unVisitedNodes)) {
+        let minNodeId = null;
+
+        console.log(Object.keys(unVisitedNodes).length);
+        console.log(unVisitedNodes);
+        // console.log(unVisitedNodes);
+
+        Object.entries(unVisitedNodes).forEach(function ([nodeId, edges]) {
+            if (!minNodeId) minNodeId = nodeId;
+            else if (shortestDistance[nodeId] < shortestDistance[minNodeId])
+                minNodeId = nodeId;
+        });
+
+        const minNode = graph[minNodeId];
+
+        // console.log(minNode);
+        Object.entries(minNode).forEach(function ([childNode, weight]) {
+            // prettier-ignore
+            if (weight + shortestDistance[minNodeId] < shortestDistance[childNode]) {
+                shortestDistance[childNode] = weight + shortestDistance[minNodeId]
+                predecessor[childNode] = minNodeId
+            }
+        });
+
+        // console.log(...Object.entries(unVisitedNodes));
+
+        // incr++;
+
+        // if (incr === 4) break;
+
+        // console.log(unVisitedNodes.minNodeId);
+
+        delete unVisitedNodes[minNodeId];
+    }
+
+    console.log(shortestDistance);
+    console.log(predecessor);
 };
