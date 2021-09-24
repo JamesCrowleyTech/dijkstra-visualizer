@@ -45,7 +45,7 @@ export const generateGrid = function (
     );
 
     const edgesPerNode = 2;
-    const range = [1, 6];
+    const range = [7, 12];
 
     const availableGridIds = [];
 
@@ -157,12 +157,6 @@ export const generateGrid = function (
 
 export const runDijkstra = function () {
     const { gridMap: matrix } = this;
-    // for (let i = 0, len1 = matrix.length; i < len1; i++) {
-    //     for (let j = 0, len2 = matrix[0].length; j < len2; j++) {
-    //         if (matrix[i][j]) console.log(matrix[i][j].edges);
-    //     }
-    // }
-
     const allNodes = matrix.flat().filter((node) => node);
 
     const sourceNode = allNodes.find((node) => node.source).gridId;
@@ -180,7 +174,7 @@ export const runDijkstra = function () {
 
     edges.forEach(function (edge) {
         const id = edge.id;
-        gridEdgeIdToEdge[id.match(/\d+/g).join(",")] = edge;
+        gridEdgeIdToEdge[`edge--${id.match(/\d+/g).join(",")}`] = edge;
     });
 
     allNodes.forEach(function (node) {
@@ -194,7 +188,7 @@ export const runDijkstra = function () {
 
         node.edges.forEach(function (edge) {
             const coords = [node.row, node.column, ...edge];
-            const edgeId = `${coords.join(",")}`;
+            const edgeId = `edge--${coords.join(",")}`;
             const renderedEdge = gridEdgeIdToEdge[edgeId];
             graph[node.gridId][`node--${edge.join(",")}`] = parseFloat(
                 renderedEdge.style.width
@@ -206,44 +200,55 @@ export const runDijkstra = function () {
 
     shortestDistance[sourceNode] = 0;
 
-    let incr = 0;
-
-    // console.log(shortestDistance);
-
-    while (!isEmpty(unVisitedNodes)) {
-        let minNodeId = null;
-
-        console.log(Object.keys(unVisitedNodes).length);
-        console.log(unVisitedNodes);
-        // console.log(unVisitedNodes);
-
-        Object.entries(unVisitedNodes).forEach(function ([nodeId, edges]) {
-            if (!minNodeId) minNodeId = nodeId;
-            else if (shortestDistance[nodeId] < shortestDistance[minNodeId])
-                minNodeId = nodeId;
-        });
-
-        const minNode = graph[minNodeId];
-
-        // console.log(minNode);
-        Object.entries(minNode).forEach(function ([childNode, weight]) {
-            // prettier-ignore
-            if (weight + shortestDistance[minNodeId] < shortestDistance[childNode]) {
-                shortestDistance[childNode] = weight + shortestDistance[minNodeId]
-                predecessor[childNode] = minNodeId
-            }
-        });
-
-        // console.log(...Object.entries(unVisitedNodes));
-
-        // incr++;
-
-        // if (incr === 4) break;
-
-        // console.log(unVisitedNodes.minNodeId);
-
-        delete unVisitedNodes[minNodeId];
+    function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
+
+    console.log(gridEdgeIdToEdge);
+
+    (async function () {
+        while (!isEmpty(unVisitedNodes)) {
+            let minNodeId = null;
+
+            console.log(Object.keys(unVisitedNodes).length);
+            console.log(unVisitedNodes);
+            // console.log(unVisitedNodes);
+
+            Object.entries(unVisitedNodes).forEach(function ([nodeId, edges]) {
+                if (!minNodeId) minNodeId = nodeId;
+                else if (shortestDistance[nodeId] < shortestDistance[minNodeId])
+                    minNodeId = nodeId;
+            });
+
+            const minNode = graph[minNodeId];
+
+            const matrixMinNode = gridIdToNode[minNodeId];
+
+            Object.entries(minNode).forEach(function ([childNode, weight]) {
+                const edgeId = `edge--${matrixMinNode.row},${matrixMinNode.column},${gridIdToNode[childNode].row},${gridIdToNode[childNode].column}`;
+
+                const edge = gridEdgeIdToEdge[edgeId];
+                edge.classList.add("edge-traversing");
+
+                // await sleep(400);
+
+                if (
+                    weight + shortestDistance[minNodeId] <
+                    shortestDistance[childNode]
+                ) {
+                    shortestDistance[childNode] =
+                        weight + shortestDistance[minNodeId];
+                    predecessor[childNode] = minNodeId;
+                }
+            });
+
+            delete unVisitedNodes[minNodeId];
+
+            await sleep(400);
+
+            console.log(unVisitedNodes);
+        }
+    })();
 
     console.log(shortestDistance);
     console.log(predecessor);
