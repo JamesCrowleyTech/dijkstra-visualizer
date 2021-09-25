@@ -29,7 +29,9 @@ export default function Grid() {
 
             const btnRun = document.getElementById("button-run");
 
-            const bindedRunDijkstra = runDijkstra.bind({ gridMap });
+            const speed = state.speed;
+
+            const bindedRunDijkstra = runDijkstra.bind({ gridMap, speed });
 
             btnRun.addEventListener("click", bindedRunDijkstra);
 
@@ -150,6 +152,10 @@ export default function Grid() {
                                             top: `${`${((y1 + y2) / 2 + .5) * (gridHeight / numberOfRows)}px`}`,
 
                                             transform: `translateX(-50%) rotate(${rotation}deg)`,
+
+                                            transition: `all ${
+                                                (1 / state.speed) * 30
+                                            }s linear`,
                                         }}
                                         key={`${y1}${y2}${x1}${x2}`}
                                     ></div>

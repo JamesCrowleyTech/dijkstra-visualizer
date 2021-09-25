@@ -1,6 +1,7 @@
 import Denque from "denque";
 import cloneDeep from "lodash.clonedeep";
 import { isEmpty } from "lodash";
+import { AppContext } from "./components/App/App";
 
 const generateEmptyMatrix = function (height, width = height) {
     const matrix = [];
@@ -156,7 +157,7 @@ export const generateGrid = function (
 };
 
 export const runDijkstra = function () {
-    const { gridMap: matrix } = this;
+    const { gridMap: matrix, speed } = this;
     const allNodes = matrix.flat().filter((node) => node);
 
     const sourceNode = allNodes.find((node) => node.source).gridId;
@@ -169,6 +170,7 @@ export const runDijkstra = function () {
     const predecessor = {};
     const shortestDistance = {};
     const graph = {};
+    const path = [];
 
     const edges = document.querySelectorAll(".edge");
 
@@ -204,14 +206,14 @@ export const runDijkstra = function () {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    console.log(gridEdgeIdToEdge);
+    // console.log(gridEdgeIdToEdge);
 
     (async function () {
         while (!isEmpty(unVisitedNodes)) {
             let minNodeId = null;
 
-            console.log(Object.keys(unVisitedNodes).length);
-            console.log(unVisitedNodes);
+            // console.log(Object.keys(unVisitedNodes).length);
+            // console.log(unVisitedNodes);
             // console.log(unVisitedNodes);
 
             Object.entries(unVisitedNodes).forEach(function ([nodeId, edges]) {
@@ -244,12 +246,28 @@ export const runDijkstra = function () {
 
             delete unVisitedNodes[minNodeId];
 
-            await sleep(400);
+            await sleep((1 / speed) * 30000);
 
-            console.log(unVisitedNodes);
+            // console.log(unVisitedNodes);
+        }
+
+        let currNode = gridIdToNode[destinationNode];
+        while (currNode.gridId !== sourceNode) {
+            try {
+                path.unshift(currNode.gridId);
+                currNode = gridIdToNode[predecessor[currNode.gridId]];
+            } catch {
+                throw new Error("Path unreachable");
+            }
+        }
+        path.unshift(gridIdToNode[sourceNode].gridId);
+
+        for (let i = 0; i < path.length - 1; i++) {
+            const nums1 = path[i].match(/\d+/g).join(",");
+            const nums2 = path[i + 1].match(/\d+/g).join(",");
+            const edge = gridEdgeIdToEdge[`edge--${nums1},${nums2}`];
+            edge.classList.add("edge-final");
+            await sleep(300);
         }
     })();
-
-    console.log(shortestDistance);
-    console.log(predecessor);
 };
