@@ -1,10 +1,158 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./Index.css";
 import { AppContext } from "../App/App.js";
-import { runDijkstra } from "../../helpers";
+
+import cloneDeep from "lodash.clonedeep";
+import { isEmpty } from "lodash";
+// import { runDijkstra } from "../../helpers";
 
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
+
+    console.log("grid did render");
+
+    const runDijkstra = function () {
+        const state = this;
+        console.log(state);
+        const slider = document.getElementById("speed_slider");
+        const func = () => {
+            console.log("slider changed");
+            // dispatch({ type: "SET_SPEED", payload: 10 ** (Math.random() * 4) });
+            console.log(state.speed);
+        };
+        slider.addEventListener("input", func);
+
+        const allEdges = document.querySelectorAll(".edge");
+        allEdges.forEach(function (edge) {
+            edge.style.transition = "background-position 0s linear";
+            edge.classList.remove("edge-traversing");
+            edge.classList.remove("edge-final");
+            setTimeout(
+                () =>
+                    (edge.style.transition = `background-position ${
+                        (1 / state.speed) * 30
+                    }s linear`),
+                1
+            );
+        });
+
+        const gridMap = state.gridMap;
+        const allNodes = gridMap.flat().filter((node) => node);
+
+        const sourceNode = allNodes.find((node) => node.source).gridId;
+
+        const destinationNode = allNodes.find(
+            (node) => node.destination
+        ).gridId;
+
+        const gridIdToNode = {};
+        const gridEdgeIdToEdge = {};
+
+        const predecessor = {};
+        const shortestDistance = {};
+        const graph = {};
+        const path = [];
+
+        const edges = document.querySelectorAll(".edge");
+
+        edges.forEach(function (edge) {
+            const id = edge.id;
+            gridEdgeIdToEdge[`edge--${id.match(/\d+/g).join(",")}`] = edge;
+        });
+
+        allNodes.forEach(function (node) {
+            gridIdToNode[node.gridId] = node;
+            predecessor[node.gridId] = null;
+            shortestDistance[node.gridId] = Number.POSITIVE_INFINITY;
+
+            graph[node.gridId] = {};
+
+            node.renderedEdges = {};
+
+            node.edges.forEach(function (edge) {
+                const coords = [node.row, node.column, ...edge];
+                const edgeId = `edge--${coords.join(",")}`;
+                const renderedEdge = gridEdgeIdToEdge[edgeId];
+                graph[node.gridId][`node--${edge.join(",")}`] = parseFloat(
+                    renderedEdge.style.width
+                );
+            });
+        });
+
+        const unVisitedNodes = cloneDeep(graph);
+
+        shortestDistance[sourceNode] = 0;
+
+        function sleep(ms) {
+            return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        (async function () {
+            await sleep(3);
+
+            while (!isEmpty(unVisitedNodes)) {
+                let minNodeId = null;
+
+                Object.entries(unVisitedNodes).forEach(function ([
+                    nodeId,
+                    edges,
+                ]) {
+                    if (!minNodeId) minNodeId = nodeId;
+                    else if (
+                        shortestDistance[nodeId] < shortestDistance[minNodeId]
+                    )
+                        minNodeId = nodeId;
+                });
+
+                const minNode = graph[minNodeId];
+
+                const matrixMinNode = gridIdToNode[minNodeId];
+
+                Object.entries(minNode).forEach(function ([childNode, weight]) {
+                    const edgeId = `edge--${matrixMinNode.row},${matrixMinNode.column},${gridIdToNode[childNode].row},${gridIdToNode[childNode].column}`;
+
+                    const edge = gridEdgeIdToEdge[edgeId];
+                    edge.classList.add("edge-traversing");
+
+                    if (
+                        weight + shortestDistance[minNodeId] <
+                        shortestDistance[childNode]
+                    ) {
+                        shortestDistance[childNode] =
+                            weight + shortestDistance[minNodeId];
+                        predecessor[childNode] = minNodeId;
+                    }
+                });
+
+                delete unVisitedNodes[minNodeId];
+
+                console.log(state.speed);
+
+                await sleep((1 / state.speed) * 30000);
+            }
+
+            let currNode = gridIdToNode[destinationNode];
+            while (currNode.gridId !== sourceNode) {
+                try {
+                    path.unshift(currNode.gridId);
+                    currNode = gridIdToNode[predecessor[currNode.gridId]];
+                } catch {
+                    throw new Error("Path unreachable");
+                }
+            }
+            path.unshift(gridIdToNode[sourceNode].gridId);
+
+            for (let i = 0; i < path.length - 1; i++) {
+                const nums1 = path[i].match(/\d+/g).join(",");
+                const nums2 = path[i + 1].match(/\d+/g).join(",");
+                const edge = gridEdgeIdToEdge[`edge--${nums1},${nums2}`];
+                edge.classList.add("edge-final");
+                await sleep((1 / state.speed) * 30000);
+            }
+
+            slider.removeEventListener("input", func);
+        })();
+    };
 
     const { numberOfNodes, numberOfColumns, numberOfRows, gridMap } = state;
 
@@ -15,6 +163,8 @@ export default function Grid() {
     useEffect(
         function () {
             const mainGrid = document.querySelector(".grid");
+
+            console.log(state.speed);
 
             setIsGridLoaded(true);
             setGridWidth(mainGrid.offsetWidth);
@@ -29,18 +179,18 @@ export default function Grid() {
 
             const btnRun = document.getElementById("button-run");
 
-            const speed = state.speed;
+            const bindedDijkstra = runDijkstra.bind(state);
 
-            const bindedRunDijkstra = runDijkstra.bind({ gridMap, speed });
+            btnRun.addEventListener("click", bindedDijkstra);
 
-            btnRun.addEventListener("click", bindedRunDijkstra);
+            console.log(state);
 
             return function () {
                 window.removeEventListener("resize", handleResize);
-                btnRun.removeEventListener("click", bindedRunDijkstra);
+                btnRun.removeEventListener("click", bindedDijkstra);
             };
         },
-        [gridWidth, gridHeight, isGridLoaded, gridMap]
+        [gridWidth, gridHeight, gridMap]
     );
 
     return (
@@ -153,9 +303,9 @@ export default function Grid() {
 
                                             transform: `translateX(-50%) rotate(${rotation}deg)`,
 
-                                            transition: `all ${
-                                                (1 / state.speed) * 30
-                                            }s linear`,
+                                            // transition: `all ${
+                                            //     (1 / state.speed) * 30
+                                            // }s linear`,
                                         }}
                                         key={`${y1}${y2}${x1}${x2}`}
                                     ></div>

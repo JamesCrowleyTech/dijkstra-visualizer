@@ -7,7 +7,7 @@ import reducer from "../../reducer";
 import { generateGrid } from "../../helpers";
 
 const initialState = {
-    speed: 10000,
+    speed: 100,
     numberOfRows: 23,
     numberOfColumns: 30,
     numberOfNodes: 20,
@@ -23,6 +23,8 @@ initialState.gridMap = generateGrid(
 );
 
 const AppContext = React.createContext(initialState);
+
+setTimeout(() => console.log(initialState.speed), 10000);
 
 function App() {
     const [state, dispatch] = useReducer(reducer, initialState);
