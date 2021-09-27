@@ -9,8 +9,6 @@ import { isEmpty } from "lodash";
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
 
-    console.log("grid did render");
-
     const runDijkstra = function () {
         const state = this;
         console.log(state);
@@ -164,7 +162,9 @@ export default function Grid() {
         function () {
             const mainGrid = document.querySelector(".grid");
 
-            console.log(state.speed);
+            console.log("grid did render");
+
+            console.log(state);
 
             setIsGridLoaded(true);
             setGridWidth(mainGrid.offsetWidth);
@@ -190,7 +190,7 @@ export default function Grid() {
                 btnRun.removeEventListener("click", bindedDijkstra);
             };
         },
-        [gridWidth, gridHeight, gridMap]
+        [gridWidth, gridHeight, gridMap, state]
     );
 
     return (

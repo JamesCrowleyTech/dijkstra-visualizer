@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import "./App.css";
 import "../SelectionBar/Index";
 import SelectionBar from "../SelectionBar/Index";
@@ -28,6 +28,17 @@ setTimeout(() => console.log(initialState.speed), 10000);
 
 function App() {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    const logState = () => console.log(state);
+
+    // const interval = setInterval(logState, 1000);
+
+    useEffect(function () {
+        console.log("app did render");
+        console.log(state);
+        // console.log("sdlgkbh");
+        // clearInterval(interval);
+    });
 
     return (
         <div className="app">
