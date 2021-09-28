@@ -1,0 +1,62 @@
+.tutorial {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 42rem;
+    width: 66rem;
+    background-color: white;
+    z-index: 5;
+    box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    text-align: center;
+}
+
+.tutorial__content {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: 1.3rem;
+}
+
+.tutorial__title {
+    font-weight: 400;
+}
+
+.tutorial__page-number {
+    position: absolute;
+    top: 2.4rem;
+    right: 3rem;
+}
+
+.tutorial__text {
+    font-size: 1.4rem;
+}
+
+.tutorial__image-container {
+    height: 13rem;
+    width: 21rem;
+    justify-self: center;
+}
+
+.tutorial__image {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.tutorial__button {
+    font-size: 1.7rem;
+    background-color: #1abc9c;
+    border: none;
+    padding: 0.8rem 1.4rem;
+    margin: 0 0.6rem;
+    transition: filter 0.14s linear;
+    outline: none;
+}
+
+.tutorial__button:hover {
+    filter: brightness(92%);
+}

@@ -3,6 +3,7 @@ import "./App.css";
 import "../SelectionBar/Index";
 import SelectionBar from "../SelectionBar/Index";
 import Grid from "../Grid/Index";
+import Tutorial from "../Tutorial/Index";
 import reducer from "../../reducer";
 import { generateGrid } from "../../helpers";
 
@@ -31,18 +32,15 @@ function App() {
 
     const logState = () => console.log(state);
 
-    // const interval = setInterval(logState, 1000);
-
     useEffect(function () {
         console.log("app did render");
         console.log(state);
-        // console.log("sdlgkbh");
-        // clearInterval(interval);
-    });
+    }, []);
 
     return (
         <div className="app">
             <AppContext.Provider value={{ state, dispatch }}>
+                <Tutorial />
                 <SelectionBar />
                 <Grid />
             </AppContext.Provider>

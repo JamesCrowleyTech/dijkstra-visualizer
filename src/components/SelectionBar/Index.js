@@ -127,7 +127,15 @@ export default function SelectionBar() {
                 </div>
                 <div className="key-item-container">
                     <h3 className="key-item-title">Edge:</h3>
-                    <div className="key-edge"></div>
+                    <div className="key-edge "></div>
+                </div>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">Searching Edge:</h3>
+                    <div className="key-edge key-edge-searching"></div>
+                </div>
+                <div className="key-item-container">
+                    <h3 className="key-item-title">Best Path Edge:</h3>
+                    <div className="key-edge key-edge-best"></div>
                 </div>
             </div>
         </div>
