@@ -11,7 +11,7 @@ const initialState = {
     speed: 100,
     numberOfRows: 23,
     numberOfColumns: 30,
-    numberOfNodes: 20,
+    numberOfNodes: 25,
     shouldCreateNodes: false,
     isRunning: false,
 };
@@ -24,8 +24,6 @@ initialState.gridMap = generateGrid(
 );
 
 const AppContext = React.createContext(initialState);
-
-setTimeout(() => console.log(initialState.speed), 10000);
 
 function App() {
     const [state, dispatch] = useReducer(reducer, initialState);

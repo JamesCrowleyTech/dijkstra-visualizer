@@ -102,7 +102,11 @@ export default function Grid() {
                         minNodeId = nodeId;
                 });
 
+                delete unVisitedNodes[minNodeId];
+
                 const minNode = graph[minNodeId];
+
+                if (isEmpty(minNode)) continue;
 
                 const matrixMinNode = gridIdToNode[minNodeId];
 
@@ -122,15 +126,14 @@ export default function Grid() {
                     }
                 });
 
-                delete unVisitedNodes[minNodeId];
-
-                console.log(state.speed);
-
+                console.log(`${new Date().getTime()}, ${minNodeId}`);
+                if (isEmpty(unVisitedNodes)) break;
                 await sleep((1 / state.speed) * 30000);
             }
 
             let currNode = gridIdToNode[destinationNode];
             while (currNode.gridId !== sourceNode) {
+                console.log(new Date().getTime());
                 try {
                     path.unshift(currNode.gridId);
                     currNode = gridIdToNode[predecessor[currNode.gridId]];

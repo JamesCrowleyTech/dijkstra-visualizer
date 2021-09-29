@@ -44,7 +44,10 @@ export default function Tutorial() {
                 <button
                     className="tutorial__button"
                     type="button"
-                    onClick={function () {}}
+                    onClick={function () {
+                        document.querySelector(".tutorial").style.display =
+                            "none";
+                    }}
                 >
                     {page === pagesData.length - 1
                         ? "Finish Tutorial!"

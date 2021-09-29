@@ -43,7 +43,7 @@ export const generateGrid = function (
         Math.random() * Math.floor(height / 2) + Math.floor(height / 4)
     );
 
-    const edgesPerNode = 2;
+    const edgesPerNode = 3;
     const range = [7, 12];
 
     const availableGridIds = [];
