@@ -9,9 +9,9 @@ import { generateGrid } from "../../helpers";
 
 const initialState = {
     speed: 100,
-    numberOfRows: 23,
-    numberOfColumns: 30,
-    numberOfNodes: 25,
+    numberOfRows: 15,
+    numberOfColumns: 20,
+    numberOfNodes: 15,
     shouldCreateNodes: false,
     isRunning: false,
 };
@@ -27,13 +27,6 @@ const AppContext = React.createContext(initialState);
 
 function App() {
     const [state, dispatch] = useReducer(reducer, initialState);
-
-    const logState = () => console.log(state);
-
-    useEffect(function () {
-        console.log("app did render");
-        console.log(state);
-    }, []);
 
     return (
         <div className="app">

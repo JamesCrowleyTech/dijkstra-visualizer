@@ -38,11 +38,7 @@ speedSliderIntervals.forEach(function (pair, i) {
         // prettier-ignore
         const prev = Object.entries(speedSliderIntervals[i - 1])
         speedSliderPoints += (parseInt(v) - parseInt(prev[0][1])) / n;
-        for (
-            let j = parseInt(prev[0][1]) + parseInt(n);
-            j <= parseInt(v);
-            j += parseInt(n)
-        ) {
+        for (let j = parseInt(prev[0][1]) + parseInt(n); j <= parseInt(v); j += parseInt(n)) {
             sliderValueToSpeed.push(j);
         }
     }
@@ -65,16 +61,11 @@ export default function SelectionBar() {
         const generateListener = function () {
             dispatch({ type: "SET_SHOULDCREATENODES_TRUE", payload: null });
             dispatch({ type: "NEW_GRID", payload: null });
-
-            // console.log(state.gridMap);
         };
 
         generateButton.addEventListener("click", generateListener);
 
-        speedSlider.addEventListener(
-            "input",
-            speedSliderListener.bind(speedSlider)
-        );
+        speedSlider.addEventListener("input", speedSliderListener.bind(speedSlider));
 
         return function () {
             speedSlider.removeEventListener("input", speedSliderListener);
@@ -85,11 +76,7 @@ export default function SelectionBar() {
     return (
         <div className="selection">
             <h1 className="selection-title">Dijkstra Visualizer</h1>
-            <button
-                type="button"
-                className="button-generate"
-                id="button-generate"
-            >
+            <button type="button" className="button-generate" id="button-generate">
                 GENERATE!
             </button>
 

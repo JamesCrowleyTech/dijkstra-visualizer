@@ -1,5 +1,6 @@
 import Denque from "denque";
 import { AppContext } from "./components/App/App";
+import cloneDeep from "lodash.clonedeep";
 
 const generateEmptyMatrix = function (height, width = height) {
     const matrix = [];
@@ -16,32 +17,20 @@ const generateEmptyMatrix = function (height, width = height) {
 const getUnvisitedNeighbours = function (matrix, visited, i, j) {
     const unvisitedNeighbours = [];
     if (i > 0 && !visited[i - 1][j]) unvisitedNeighbours.push([i - 1, j]);
-    if (i < matrix.length - 1 && !visited[i + 1][j])
-        unvisitedNeighbours.push([i + 1, j]);
+    if (i < matrix.length - 1 && !visited[i + 1][j]) unvisitedNeighbours.push([i + 1, j]);
     if (j > 0 && !visited[i][j - 1]) unvisitedNeighbours.push([i, j - 1]);
-    if (j < matrix[0].length - 1 && !visited[i][j + 1])
-        unvisitedNeighbours.push([i, j + 1]);
+    if (j < matrix[0].length - 1 && !visited[i][j + 1]) unvisitedNeighbours.push([i, j + 1]);
     return unvisitedNeighbours;
 };
 
-export const generateGrid = function (
-    height,
-    width,
-    numberOfNodes,
-    shouldCreateNodes
-) {
+export const generateGrid = function (height, width, numberOfNodes, shouldCreateNodes) {
     const matrix = generateEmptyMatrix(height, width);
 
     if (!shouldCreateNodes) return matrix;
-
     const outerVisited = generateEmptyMatrix(height, width);
 
-    const sourceX = Math.floor(
-        Math.random() * Math.floor(width / 2) + Math.floor(width / 4)
-    );
-    const sourceY = Math.floor(
-        Math.random() * Math.floor(height / 2) + Math.floor(height / 4)
-    );
+    const sourceX = Math.floor(Math.random() * Math.floor(width / 2) + Math.floor(width / 4));
+    const sourceY = Math.floor(Math.random() * Math.floor(height / 2) + Math.floor(height / 4));
 
     const edgesPerNode = 3;
     const range = [7, 12];
@@ -94,30 +83,15 @@ export const generateGrid = function (
 
             potentialConnectedNodes.push([currY, currX]);
 
-            const neighbours = getUnvisitedNeighbours(
-                matrix,
-                innerVisited,
-                currY,
-                currX
-            );
+            const neighbours = getUnvisitedNeighbours(matrix, innerVisited, currY, currX);
 
             neighbours.forEach(([i, j]) => innerQueue.push([i, j]));
         }
 
-        potentialConnectedNodes.forEach(function ([y, x]) {
-            // console.log([y, x]);
-            // if (Math.random() > 0.6) outerVisited[y][x] = true;
-        });
-
         potentialConnectedNodes = potentialConnectedNodes
             .filter(function ([currY, currX]) {
-                const distanceFromParent =
-                    Math.abs(currY - nodeY) + Math.abs(currX - nodeX);
-                if (
-                    distanceFromParent < range[0] ||
-                    distanceFromParent > range[1]
-                )
-                    return false;
+                const distanceFromParent = Math.abs(currY - nodeY) + Math.abs(currX - nodeX);
+                if (distanceFromParent < range[0] || distanceFromParent > range[1]) return false;
 
                 if (outerVisited[currY][currX]) return false;
 
@@ -126,7 +100,50 @@ export const generateGrid = function (
             .sort(() => Math.random() - 0.5);
 
         for (let i = 0; i < edgesPerNode; i++) {
-            const newNeighbour = potentialConnectedNodes.pop();
+            let newNeighbour;
+            let isNeighbourDetermined = false;
+
+            while (!isNeighbourDetermined) {
+                newNeighbour = potentialConnectedNodes.pop();
+                const [newNeighbourY, newNeighbourX] = newNeighbour;
+
+                const DiffY = newNeighbourY - nodeY;
+                const DiffX = newNeighbourX - nodeX;
+
+                const absDiffY = Math.abs(nodeY - newNeighbourY);
+                const absDiffX = Math.abs(nodeX - newNeighbourX);
+
+                const greaterDiff = Math.max(absDiffY, absDiffX);
+
+                let testY = nodeY;
+                let testX = nodeX;
+
+                const addToY = DiffY / greaterDiff;
+                const addToX = DiffX / greaterDiff;
+
+                let setNeighbourDeterminedTrue = true;
+
+                for (let i = 0; i < greaterDiff; i++) {
+                    testY += addToY;
+                    testX += addToX;
+
+                    const roundedY = Number(testY.toFixed(9));
+                    const roundedX = Number(testX.toFixed(9));
+
+                    const integerY = Math.trunc(testY);
+                    const integerX = Math.trunc(testX);
+
+                    if (roundedY === integerY && roundedX === integerX) {
+                        if (outerVisited[integerY][integerX]) {
+                            setNeighbourDeterminedTrue = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (setNeighbourDeterminedTrue) isNeighbourDetermined = true;
+            }
+
             const [newNeighbourY, newNeighbourX] = newNeighbour;
 
             matrix[newNeighbourY][newNeighbourX] = {
@@ -143,10 +160,10 @@ export const generateGrid = function (
             nodesToCreate--;
             if (!nodesToCreate) break;
 
-            if (nodesToCreate === 1)
-                matrix[newNeighbourY][newNeighbourX].destination = true;
+            if (nodesToCreate === 1) matrix[newNeighbourY][newNeighbourX].destination = true;
 
-            outerVisited[nodeY][nodeX] = true;
+            outerVisited[newNeighbourY][newNeighbourX] = true;
+
             outerQueue.push(matrix[newNeighbourY][newNeighbourX]);
         }
     }
