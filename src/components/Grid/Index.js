@@ -4,7 +4,6 @@ import { AppContext } from "../App/App.js";
 
 import cloneDeep from "lodash.clonedeep";
 import { isEmpty } from "lodash";
-// import { runDijkstra } from "../../helpers";
 
 export default function Grid() {
     const { state, dispatch } = useContext(AppContext);
@@ -21,6 +20,7 @@ export default function Grid() {
         });
 
         const gridMap = state.gridMap;
+
         const allNodes = gridMap.flat().filter((node) => node);
 
         const sourceNode = allNodes.find((node) => node.source).gridId;

@@ -32,8 +32,8 @@ export const generateGrid = function (height, width, numberOfNodes, shouldCreate
     const sourceX = Math.floor(Math.random() * Math.floor(width / 2) + Math.floor(width / 4));
     const sourceY = Math.floor(Math.random() * Math.floor(height / 2) + Math.floor(height / 4));
 
-    const edgesPerNode = 3;
-    const range = [7, 12];
+    const edgesPerNode = 4;
+    const range = [7, 30];
 
     const availableGridIds = [];
 
@@ -166,6 +166,16 @@ export const generateGrid = function (height, width, numberOfNodes, shouldCreate
 
             outerQueue.push(matrix[newNeighbourY][newNeighbourX]);
         }
+    }
+    let remake = true;
+
+    for (const row of matrix) {
+        for (const column of row) {
+            if (column.source) remake = false;
+        }
+    }
+    if (remake) {
+        return generateGrid(height, width, numberOfNodes, shouldCreateNodes);
     }
 
     return matrix;
