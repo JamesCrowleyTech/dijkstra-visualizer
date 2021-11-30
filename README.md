@@ -1,4 +1,4 @@
-Dijkstra Visualizer
+## Dijkstra Visualizer
 
 This project is hosted at https://james-crowley-dijkstra-visualizer.netlify.app/
 
