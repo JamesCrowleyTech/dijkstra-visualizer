@@ -1,24 +1,30 @@
 import React, { useState } from "react";
 import "./Index.css";
 import picture1 from "../../images/picture1.jpeg";
-import picture2 from "../../images/picture2.jpeg";
-import picture3 from "../../images/picture3.jpeg";
+import imageGenerate from "../../images/generate.png";
+import imageRunDijkstra from "../../images/runDijkstra.png";
+import videoSpeedSlider from "../../videos/speedSlider.mp4";
 
 const pagesData = [
     {
         title: "Welcome To Dijkstra Visualizer",
-        text: "This tutorial will walk you through dijkstra's algorithm, and how to use this visualizer",
-        image: picture1,
+        text: "This tutorial will walk you through dijkstra's algorithm, and how to use this visualizer.",
+        // image: picture1,
     },
     {
-        title: "Page 1",
-        text: "This is page 1. Lorem ipsum dolor sit amet, sit ei audiam veritus, mei eu urbanitas consectetuer. Meliore vivendum deterruisset sed cu, ad eam graeci voluptatibus. Ad mei minimum fierent. Pri nobis verear ea, in aliquip conceptam pro. Cum diam solet philosophia cu, nec lorem dicunt et.",
-        image: picture2,
+        title: "How To Use This Visualizer: Step 1",
+        text: 'First, click the "Generate" button at the top bar. This will generate a graph that Dijkstra\'s algorithm will be applied to.',
+        image: imageGenerate,
     },
     {
-        title: "Page 2",
-        text: "This is page 2. Lorem ipsum dolor sit amet, modo veniam eu vix. Cum te dicat perfecto salutatus, at nostrud facilis imperdiet est. Est duis conceptam complectitur ex, sint minim eos id, ne sit tollit corpora. Sea fabulas suavitate at, vidit aliquam ne mel. Has an quot oratio, sed epicuri accusamus inciderint no. Ius repudiandae necessitatibus ea.",
-        image: picture3,
+        title: "Step 2",
+        text: 'You can use the "speed" slider at the top bar to adjust the speed of the algorithm.',
+        video: videoSpeedSlider,
+    },
+    {
+        title: "Step 3",
+        text: 'Next, click the "Run" button at the top bar. This will demonstrate the algorithm.',
+        image: imageRunDijkstra,
     },
 ];
 
@@ -35,23 +41,29 @@ export default function Tutorial() {
                     {page}/{pagesData.length - 1}
                 </h2>
 
+                {data.image && (
+                    <div className="tutorial__image-container">
+                        <img className="tutorial__image" src={data.image}></img>
+                    </div>
+                )}
+                {data.video && (
+                    <div className="tutorial__video-container">
+                        <video className="tutorial__video" autoPlay loop>
+                            <source src={data.video} type="video/mp4"></source>
+                        </video>
+                    </div>
+                )}
                 <p className="tutorial__text">{data.text}</p>
-                <div className="tutorial__image-container">
-                    <img className="tutorial__image" src={data.image}></img>
-                </div>
             </div>
             <div className="tutorial__buttons">
                 <button
                     className="tutorial__button"
                     type="button"
                     onClick={function () {
-                        document.querySelector(".tutorial").style.display =
-                            "none";
+                        document.querySelector(".tutorial").style.display = "none";
                     }}
                 >
-                    {page === pagesData.length - 1
-                        ? "Finish Tutorial!"
-                        : "Skip Tutorial"}
+                    {page === pagesData.length - 1 ? "Finish Tutorial!" : "Skip Tutorial"}
                 </button>
                 <button
                     className="tutorial__button"

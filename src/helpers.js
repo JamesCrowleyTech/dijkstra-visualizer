@@ -32,8 +32,8 @@ export const generateGrid = function (height, width, numberOfNodes, shouldCreate
     const sourceX = Math.floor(Math.random() * Math.floor(width / 2) + Math.floor(width / 4));
     const sourceY = Math.floor(Math.random() * Math.floor(height / 2) + Math.floor(height / 4));
 
-    const edgesPerNode = 4;
-    const range = [7, 30];
+    const edgesPerNode = 3;
+    const range = [7, 20];
 
     const availableGridIds = [];
 

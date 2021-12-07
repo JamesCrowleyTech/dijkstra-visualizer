@@ -23,6 +23,7 @@
 
 .tutorial__title {
     font-weight: 400;
+    margin-bottom: 2rem;
 }
 
 .tutorial__page-number {
@@ -32,19 +33,46 @@
 }
 
 .tutorial__text {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
 }
 
 .tutorial__image-container {
-    height: 13rem;
-    width: 21rem;
+    height: 8rem;
     justify-self: center;
+    margin-bottom: 1rem;
+    border-radius: 0.3rem;
+    overflow: hidden;
 }
 
 .tutorial__image {
-    object-fit: cover;
     height: 100%;
+    display: inline-block;
+}
+
+.tutorial__video-container {
+    height: 8rem;
+    width: 40rem;
+    display: inline-block;
+    justify-self: center;
+    overflow: hidden;
+    border-radius: 0.2rem;
+}
+
+.tutorial__video {
     width: 100%;
+    position: relative;
+    transform: translateY(-32.3%) scale(1.005);
+}
+
+.tutorial__video::after {
+    position: absolute;
+    display: inline-block;
+    background-color: red;
+    width: 10rem;
+    height: 10rem;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
 }
 
 .tutorial__button {
