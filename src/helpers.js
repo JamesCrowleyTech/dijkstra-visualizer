@@ -99,7 +99,9 @@ export const generateGrid = function (height, width, numberOfNodes, shouldCreate
             })
             .sort(() => Math.random() - 0.5);
 
-        for (let i = 0; i < edgesPerNode; i++) {
+        const currEdgesPerNode = Math.round(edgesPerNode + (Math.random() * 5 - 2.5));
+
+        for (let i = 0; i < currEdgesPerNode; i++) {
             let newNeighbour;
             let isNeighbourDetermined = false;
 
@@ -160,13 +162,36 @@ export const generateGrid = function (height, width, numberOfNodes, shouldCreate
             nodesToCreate--;
             if (!nodesToCreate) break;
 
-            if (nodesToCreate === 1) matrix[newNeighbourY][newNeighbourX].destination = true;
+            if (nodesToCreate === 1) {
+                matrix[newNeighbourY][newNeighbourX].destination = true;
+
+                const allNodes = [];
+
+                for (const row of matrix) {
+                    for (const node of row) {
+                        if (node && !node.destination) {
+                            let push = true;
+
+                            for (const edge of node.edges) {
+                                if (edge[0] === newNeighbourY && edge[1] && newNeighbourX) push = false;
+                            }
+                            push && allNodes.push(node);
+                        }
+                    }
+                }
+
+                const destinationConnectedNode = allNodes[Math.floor(Math.random() * (numberOfNodes - 1))];
+
+                if (destinationConnectedNode)
+                    matrix[destinationConnectedNode.row][destinationConnectedNode.column].edges.push([newNeighbourY, newNeighbourX]);
+            }
 
             outerVisited[newNeighbourY][newNeighbourX] = true;
 
             outerQueue.push(matrix[newNeighbourY][newNeighbourX]);
         }
     }
+
     let remake = true;
 
     for (const row of matrix) {
